@@ -1,3 +1,1 @@
-0521 최신11
-16:40asdasdasdsadsadasdasd
-GILL
+열심히 합시다.
