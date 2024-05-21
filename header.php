@@ -67,3 +67,5 @@
             <button class="mt-6 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded" onclick="openModal('createPetitionModal')">청원하기</button>
         </div>
     </header>
+</body>
+</html>

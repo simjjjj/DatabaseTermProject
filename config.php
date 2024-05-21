@@ -5,9 +5,10 @@ $db_user = "root";
 $db_password = "1234";
 $db_name = "konkuk_petition";
 
-$con = mysqli_connect($db_host, $db_user, $db_password, $db_name);
-if (mysqli_connect_errno()) {
-    error_log("데이터베이스 연결 실패: " . mysqli_connect_error());
+// 데이터베이스 연결
+$con = new mysqli($db_host, $db_user, $db_password, $db_name);
+if ($con->connect_error) {
+    error_log("데이터베이스 연결 실패: " . $con->connect_error);
     exit();
 }
 
@@ -15,15 +16,24 @@ session_start();
 
 // 회원가입 처리
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
-    $name = mysqli_real_escape_string($con, $_POST['name']);
-    $username = mysqli_real_escape_string($con, $_POST['username']);
-    $password = mysqli_real_escape_string($con, password_hash($_POST['password'], PASSWORD_DEFAULT));
+    $name = $con->real_escape_string($_POST['name']);
+    $username = $con->real_escape_string($_POST['username']);
+    $password = password_hash($con->real_escape_string($_POST['password']), PASSWORD_DEFAULT);
     $password_confirm = $_POST['password_confirm'];
-    $email = mysqli_real_escape_string($con, $_POST['email']);
+    $email = $con->real_escape_string($_POST['email']);
     $is_admin = isset($_POST['is_admin']) ? 1 : 0;
 
     if ($_POST['password'] !== $password_confirm) {
         $_SESSION['message'] = "비밀번호가 일치하지 않습니다.";
+        header("Location: index.php");
+        exit();
+    }
+
+    // 이메일 중복 확인
+    $check_email_query = "SELECT * FROM users WHERE email = '$email'";
+    $result = $con->query($check_email_query);
+    if ($result->num_rows > 0) {
+        $_SESSION['message'] = "이미 등록된 이메일입니다.";
         header("Location: index.php");
         exit();
     }
@@ -53,12 +63,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
 
     $sql = "INSERT INTO users (name, username, password, email, student_id, is_admin) VALUES ('$name', '$username', '$password', '$email', '$student_id', '$is_admin')";
 
-    if (mysqli_query($con, $sql)) {
+    if ($con->query($sql) === TRUE) {
         $_SESSION['message'] = "계정이 성공적으로 생성되었습니다.";
         header("Location: index.php");
         exit();
     } else {
-        $_SESSION['message'] = "오류: " . mysqli_error($con);
+        $_SESSION['message'] = "오류: " . $con->error;
         header("Location: index.php");
         exit();
     }
