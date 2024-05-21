@@ -4,7 +4,7 @@ include 'functions.php';
 
 $message = '';
 
-// 로그인 처리
+// 로그인 처리12
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     $username = $con->real_escape_string($_POST['username']);
     $password = $_POST['password'];
