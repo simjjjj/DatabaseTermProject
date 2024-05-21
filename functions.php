@@ -5,7 +5,7 @@ function isAdmin() {
 
 function requireAdmin() {
     if (!isAdmin()) {
-        $_SESSION['message'] = "관리자 권한 필요합니다.";
+        $_SESSION['message'] = "관리자 권한이 필요합니다.";
         header("Location: index.php");
         exit();
     }
