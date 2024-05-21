@@ -68,6 +68,31 @@
     </div>
 </div>
 
+<div id="createPetitionModal" class="fixed inset-0 hidden modal flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">청원하기</h2>
+            <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('createPetitionModal')">&times;</button>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="create_petition" value="1">
+            <div class="mb-4">
+                <label for="petition-title" class="block text-sm font-medium text-gray-700">제목</label>
+                <input type="text" id="petition-title" name="title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <div class="mb-4">
+                <label for="petition-content" class="block text-sm font-medium text-gray-700">내용</label>
+                <textarea id="petition-content" name="content" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="petition-category" class="block text-sm font-medium text-gray-700">카테고리</label>
+                <input type="text" id="petition-category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">청원하기</button>
+        </form>
+    </div>
+</div>
+
 <div id="messageModal" class="fixed inset-0 hidden modal flex items-center justify-center">
     <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
         <div class="flex justify-between items-center mb-6">
@@ -76,6 +101,31 @@
         </div>
         <p id="messageText" class="mb-4"></p>
         <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700" onclick="closeModal('messageModal')">확인</button>
+    </div>
+</div>
+
+<div id="createPetitionModal" class="fixed inset-0 hidden modal flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">청원하기</h2>
+            <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('createPetitionModal')">&times;</button>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" name="create_petition" value="1">
+            <div class="mb-4">
+                <label for="petition-title" class="block text-sm font-medium text-gray-700">제목</label>
+                <input type="text" id="petition-title" name="title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+            </div>
+            <div class="mb-4">
+                <label for="petition-content" class="block text-sm font-medium text-gray-700">내용</label>
+                <textarea id="petition-content" name="content" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="petition-category" class="block text-sm font-medium text-gray-700">카테고리</label>
+                <input type="text" id="petition-category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">청원하기</button>
+        </form>
     </div>
 </div>
 
