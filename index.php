@@ -3,7 +3,7 @@ include 'config.php';
 include 'functions.php';
 
 $message = '';
-
+// 방승재 처리 12
 // 로그인 처리12
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     $username = $con->real_escape_string($_POST['username']);
