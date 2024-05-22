@@ -26,7 +26,9 @@
 <body class="dark-mode">
     <nav class="bg-white shadow fixed top-0 left-0 w-full z-50">
         <div class="container mx-auto flex items-center justify-between py-4 px-6">
-            <img src="kulogo.png" alt="Konkuk University Logo" class="h-12">
+            <a href="https://m.kku.ac.kr/mbshome/mbs/wwwkr/index.do">
+                <img src="kulogo.png" alt="Konkuk University Logo" class="h-12">
+            </a>
             <ul class="flex space-x-6">
                 <li><a href="#" class="hover:text-blue-600">청원 소개</a></li>
                 <li><a href="#" class="hover:text-blue-600">청원 하기</a></li>
