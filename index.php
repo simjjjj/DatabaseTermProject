@@ -3,8 +3,7 @@ include 'config.php';
 include 'functions.php';
 
 $message = '';
-// 방승재 처리 12
-// 로그인 처리12
+// 로그인 처리
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     $username = $con->real_escape_string($_POST['username']);
     $password = $_POST['password'];
@@ -26,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             error_log("로그인 실패: $username");
         }
     } else {
-        $_SESSION['message'] = "잘못된 아이디 또는 비밀번호입니다. " . $con->error;
+        $_SESSION['message'] = "잘못된 아이디 또는 비밀번호입니다.";
         error_log("로그인 쿼리 실패: " . $con->error);
     }
 }
@@ -51,9 +50,69 @@ if (isset($_SESSION['message'])) {
 
 <section class="bg-gray-100 py-12">
     <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-6">인기 청원</h2>
+        <div id="popular-petition-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <?php
+            // 인기 청원 목록 조회
+            $result = $con->query("SELECT * FROM petitions WHERE is_popular = 1");
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<div class='bg-white shadow rounded-lg overflow-hidden petition-card'>";
+                    echo "<img src='https://placehold.co/300x200?text=' alt='Petition image' class='w-full h-48 object-cover'>";
+                    echo "<div class='p-4'>";
+                    echo "<h3 class='font-bold text-lg'>" . htmlspecialchars($row['title']) . "</h3>";
+                    echo "<p class='text-sm mt-2 text-gray-700'>" . htmlspecialchars($row['content']) . "</p>";
+                    echo "<div class='mt-4 flex justify-between items-center'>";
+                    echo "<span class='text-gray-600 text-sm'>청원기간: " . htmlspecialchars($row['created_at']) . "</span>";
+                    echo "<button class='text-blue-600 hover:underline'>자세히 보기</button>";
+                    echo "</div>";
+                    echo "<div class='mt-4 flex justify-between items-center'>";
+                    echo "<span class='text-gray-600 text-sm'>" . htmlspecialchars($row['likes']) . " Likes</span>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                }
+            } else {
+                echo "<p>인기 청원이 없습니다.</p>";
+            }
+            ?>
+        </div>
+    </div>
+</section>
+
+<section class="bg-gray-100 py-12">
+    <div class="container mx-auto px-6">
         <h2 class="text-3xl font-bold mb-6">청원 안내</h2>
         <div id="petition-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- 청원 목록 조회 코드 -->
+            <?php
+            // 일반 청원 목록 조회 (인기 청원 제외)
+            $result = $con->query("SELECT * FROM petitions WHERE is_popular = 0");
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<div class='bg-white shadow rounded-lg overflow-hidden petition-card'>";
+                    echo "<img src='https://placehold.co/300x200?text=' alt='Petition image' class='w-full h-48 object-cover'>";
+                    echo "<div class='p-4'>";
+                    echo "<h3 class='font-bold text-lg'>" . htmlspecialchars($row['title']) . "</h3>";
+                    echo "<p class='text-sm mt-2 text-gray-700'>" . htmlspecialchars($row['content']) . "</p>";
+                    echo "<div class='mt-4 flex justify-between items-center'>";
+                    echo "<span class='text-gray-600 text-sm'>청원기간: " . htmlspecialchars($row['created_at']) . "</span>";
+                    echo "<button class='text-blue-600 hover:underline'>자세히 보기</button>";
+                    echo "</div>";
+                    echo "<div class='mt-4 flex justify-between items-center'>";
+                    echo "<form method='post' action='like_petition.php'>";
+                    echo "<input type='hidden' name='like_petition' value='1'>";
+                    echo "<input type='hidden' name='petition_id' value='" . $row['id'] . "'>";
+                    echo "<button type='submit' class='text-gray-600 hover:underline'><i class='far fa-heart'></i> 좋아요</button>";
+                    echo "</form>";
+                    echo "<span class='text-gray-600 text-sm'>" . htmlspecialchars($row['likes']) . " Likes</span>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                }
+            } else {
+                echo "<p>청원이 없습니다.</p>";
+            }
+            ?>
         </div>
         <div class="text-center mt-6">
             <button id="loadMore" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="loadMore()">더 보기</button>
@@ -126,11 +185,4 @@ if (isset($_SESSION['message'])) {
         xhr.send();
     }
 
-    window.onload = function() {
-        <?php if ($message) { ?>
-            openModal('messageModal');
-        <?php } ?>
-    }
-</script>
-</body>
-</html>
+   

@@ -61,6 +61,15 @@
         xhr.send();
     }
 
+    function checkLogin(modalId) {
+        <?php if (!isset($_SESSION['userid'])) { ?>
+            document.getElementById('messageText').innerText = "로그인 후 이용 가능합니다.";
+            openModal('messageModal');
+        <?php } else { ?>
+            openModal(modalId);
+        <?php } ?>
+    }
+
     window.onload = function() {
         <?php if ($message) { ?>
             document.getElementById('messageText').innerText = "<?php echo $message; ?>";
