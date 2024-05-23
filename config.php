@@ -2,7 +2,7 @@
 // 데이터베이스 연결 설정
 $db_host = "localhost";
 $db_user = "root";
-$db_password = "ghkd5384";
+$db_password = "1234";
 $db_name = "konkuk_petition";
 
 // 데이터베이스 연결

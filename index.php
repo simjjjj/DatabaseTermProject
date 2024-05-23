@@ -99,12 +99,8 @@ if (isset($_SESSION['message'])) {
                     echo "<button class='text-blue-600 hover:underline'>자세히 보기</button>";
                     echo "</div>";
                     echo "<div class='mt-4 flex justify-between items-center'>";
-                    echo "<form method='post' action='like_petition.php'>";
-                    echo "<input type='hidden' name='like_petition' value='1'>";
-                    echo "<input type='hidden' name='petition_id' value='" . $row['id'] . "'>";
-                    echo "<button type='submit' class='text-gray-600 hover:underline'><i class='far fa-heart'></i> 좋아요</button>";
-                    echo "</form>";
-                    echo "<span class='text-gray-600 text-sm'>" . htmlspecialchars($row['likes']) . " Likes</span>";
+                    echo "<button onclick='likePetition(" . $row['id'] . ")' class='text-gray-600 hover:underline'><i class='far fa-heart'></i> 좋아요</button>";
+                    echo "<span id='like-count-" . $row['id'] . "' class='text-gray-600 text-sm'>" . htmlspecialchars($row['likes']) . " Likes</span>";
                     echo "</div>";
                     echo "</div>";
                     echo "</div>";

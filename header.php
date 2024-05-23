@@ -31,11 +31,11 @@
             </a>
             <ul class="flex space-x-6">
                 <li><a href="#" class="hover:text-blue-600">청원 소개</a></li>
-                <li><a href="#" class="hover:text-blue-600">청원 하기</a></li>
-                <li><a href="#" class="hover:text-blue-600" onclick="openModal('mypageModal')">마이페이지</a></li>
+                <li><a href="#" class="hover:text-blue-600" onclick="checkLogin('createPetitionModal')">청원 하기</a></li>
+                <li><a href="#" class="hover:text-blue-600" onclick="checkLogin('mypageModal')">마이페이지</a></li>
                 <li><a href="#" class="hover:text-blue-600">문의하기</a></li>
                 <?php if (isAdmin()) { ?>
-                    <li><a href="#" onclick="openModal('adminModal')" class="hover:text-blue-600">관리자 페이지</a></li>
+                    <li><a href="#" onclick="checkLogin('adminModal')" class="hover:text-blue-600">관리자 페이지</a></li>
                 <?php } ?>
             </ul>
             <div class="flex space-x-4">
@@ -57,17 +57,17 @@
         </div>
     </nav>
 
-    <header class="relative pt-20">
-        <div class="slideshow-container">
-            <img src="https://placehold.co/1920x600?text=1" class="slides fade">
-            <img src="https://placehold.co/1920x600?text=2" class="slides fade">
-            <img src="https://placehold.co/1920x600?text=3" class="slides fade">
-        </div>
-        <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-30 flex flex-col items-center justify-center text-center text-white">
-            <h1 class="text-4xl md:text-6xl font-bold">건국대학교 청원</h1>
-            <p class="text-sm md:text-lg mt-4">KU petition</p>
-            <button class="mt-6 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded" onclick="openModal('createPetitionModal')">청원하기</button>
-        </div>
-    </header>
+ <header class="relative pt-20">
+    <div class="slideshow-container">
+        <img src="https://placehold.co/1920x600?text=1" class="slides fade">
+        <img src="https://placehold.co/1920x600?text=2" class="slides fade">
+        <img src="https://placehold.co/1920x600?text=3" class="slides fade">
+    </div>
+    <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-30 flex flex-col items-center justify-center text-center text-white">
+        <h1 class="text-4xl md:text-6xl font-bold">건국대학교 청원</h1>
+        <p class="text-sm md:text-lg mt-4">KU petition</p>
+    </div>
+</header>
+
 </body>
 </html>
