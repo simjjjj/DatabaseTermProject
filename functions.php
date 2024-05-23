@@ -1,6 +1,6 @@
 <?php
 function isAdmin() {
-    return isset($_SESSION['userid']) && $_SESSION['is_admin'];
+    return isset($_SESSION['userid']) && isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 }
 
 function requireAdmin() {

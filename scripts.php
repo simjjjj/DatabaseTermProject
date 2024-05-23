@@ -70,6 +70,32 @@
         <?php } ?>
     }
 
+ 
+    function likePetition(petitionId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "like_petitions.php", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var response = JSON.parse(xhr.responseText);
+            document.getElementById('messageText').innerText = response.message;
+            openModal('messageModal');
+            if (response.like_count !== undefined) {
+                document.getElementById(`like-count-${petitionId}`).innerText = response.like_count + " Likes";
+            }
+            if (response.status === "liked") {
+                var likeIcon = document.getElementById(`like-icon-${petitionId}`);
+                likeIcon.classList.remove('far');
+                likeIcon.classList.add('fas', 'text-red-500');
+            }
+        }
+    };
+    xhr.send("like_petition=1&petition_id=" + petitionId);
+}
+
+
+
+
     window.onload = function() {
         <?php if ($message) { ?>
             document.getElementById('messageText').innerText = "<?php echo $message; ?>";

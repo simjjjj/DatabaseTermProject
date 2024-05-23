@@ -89,6 +89,19 @@ if (isset($_SESSION['message'])) {
             $result = $con->query("SELECT * FROM petitions WHERE is_popular = 0");
             if ($result) {
                 while ($row = $result->fetch_assoc()) {
+                    $petitionId = $row['id'];
+                    $liked = false;
+
+                    // 사용자가 이미 좋아요를 눌렀는지 확인
+                    if (isset($_SESSION['userid'])) {
+                        $userId = $_SESSION['userid'];
+                        $like_check_query = "SELECT * FROM likes WHERE user_id = $userId AND petition_id = $petitionId";
+                        $like_result = $con->query($like_check_query);
+                        if ($like_result->num_rows > 0) {
+                            $liked = true;
+                        }
+                    }
+
                     echo "<div class='bg-white shadow rounded-lg overflow-hidden petition-card'>";
                     echo "<img src='https://placehold.co/300x200?text=' alt='Petition image' class='w-full h-48 object-cover'>";
                     echo "<div class='p-4'>";
@@ -99,12 +112,8 @@ if (isset($_SESSION['message'])) {
                     echo "<button class='text-blue-600 hover:underline'>자세히 보기</button>";
                     echo "</div>";
                     echo "<div class='mt-4 flex justify-between items-center'>";
-                    echo "<form method='post' action='like_petition.php'>";
-                    echo "<input type='hidden' name='like_petition' value='1'>";
-                    echo "<input type='hidden' name='petition_id' value='" . $row['id'] . "'>";
-                    echo "<button type='submit' class='text-gray-600 hover:underline'><i class='far fa-heart'></i> 좋아요</button>";
-                    echo "</form>";
-                    echo "<span class='text-gray-600 text-sm'>" . htmlspecialchars($row['likes']) . " Likes</span>";
+                    echo "<button onclick='likePetition(" . $row['id'] . ")' class='text-gray-600 hover:underline'><i id='like-icon-" . $row['id'] . "' class='" . ($liked ? "fas text-red-500" : "far") . " fa-heart'></i> 좋아요</button>";
+                    echo "<span id='like-count-" . $row['id'] . "' class='text-gray-600 text-sm'>" . htmlspecialchars($row['likes']) . " Likes</span>";
                     echo "</div>";
                     echo "</div>";
                     echo "</div>";
@@ -119,6 +128,9 @@ if (isset($_SESSION['message'])) {
         </div>
     </div>
 </section>
+
+
+
 
 <?php include 'footer.php'; ?>
 <?php include 'modals.php'; ?>

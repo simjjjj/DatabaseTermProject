@@ -38,14 +38,44 @@
     }
 
     /* 글씨 크기 조정 */
-        nav ul li a {
-            font-size: 1.25rem; 
-        }
+    nav ul li a {
+        font-size: 1.25rem; 
+    }
 
     /* 네비게이션 바 애니메이션 */
     nav ul li a:hover {
         color: #1D4ED8;
         transition: color 0.3s ease-in-out;
+    }
+
+    /* 드롭다운 메뉴 스타일 */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
     }
 
     /* 카드 호버 애니메이션 */

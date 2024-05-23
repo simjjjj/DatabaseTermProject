@@ -1,8 +1,13 @@
 <?php
+// 세션 시작
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // 데이터베이스 연결 설정
 $db_host = "localhost";
 $db_user = "root";
-$db_password = "ghkd5384";
+$db_password = "1234";
 $db_name = "konkuk_petition";
 
 // 데이터베이스 연결
@@ -12,7 +17,8 @@ if ($con->connect_error) {
     exit();
 }
 
-session_start();
+
+
 
 // 회원가입 처리
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {

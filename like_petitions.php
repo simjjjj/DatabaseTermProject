@@ -1,9 +1,16 @@
 <?php
 include 'config.php';
 
+header('Content-Type: application/json');
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['like_petition'])) {
     $petitionId = $_POST['petition_id'];
     $userId = $_SESSION['userid'];
+
+    if (!$userId) {
+        echo json_encode(["message" => "로그인이 필요합니다.", "status" => "error"]);
+        exit();
+    }
 
     // 사용자가 이미 좋아요를 눌렀는지 확인
     $check_like_query = "SELECT * FROM likes WHERE user_id = $userId AND petition_id = $petitionId";
@@ -26,9 +33,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['like_petition'])) {
             $con->query("UPDATE petitions SET is_popular = 1 WHERE id = $petitionId");
         }
 
-        echo "Likes updated successfully.";
+        echo json_encode(["message" => "좋아요가 업데이트되었습니다.", "like_count" => $like_count, "status" => "liked"]);
     } else {
-        echo "You have already liked this petition.";
+        echo json_encode(["message" => "이미 좋아요를 누르셨습니다.", "status" => "already_liked"]);
     }
+} else {
+    echo json_encode(["message" => "잘못된 요청입니다.", "status" => "error"]);
 }
 ?>

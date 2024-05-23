@@ -1,3 +1,7 @@
+<?php
+include 'config.php';
+require_once 'functions.php';
+?>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -16,6 +20,36 @@
             transition: color 0.3s ease-in-out;
         }
 
+        /* 드롭다운 메뉴 스타일 */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
         /* 카드 호버 애니메이션 */
         .petition-card:hover {
             transform: scale(1.05);
@@ -26,16 +60,28 @@
 <body class="dark-mode">
     <nav class="bg-white shadow fixed top-0 left-0 w-full z-50">
         <div class="container mx-auto flex items-center justify-between py-4 px-6">
-            <a href="https://m.kku.ac.kr/mbshome/mbs/wwwkr/index.do">
+            <a href="index.php  ">
                 <img src="kulogo.png" alt="Konkuk University Logo" class="h-12">
             </a>
             <ul class="flex space-x-6">
-                <li><a href="#" class="hover:text-blue-600">청원 소개</a></li>
-                <li><a href="#" class="hover:text-blue-600">청원 하기</a></li>
-                <li><a href="#" class="hover:text-blue-600" onclick="openModal('mypageModal')">마이페이지</a></li>
+                <li class="dropdown">
+                    <a href="index.php" class="hover:text-blue-600">청원 소개</a>
+                    <div class="dropdown-content">
+                    <a href="mypage.php">청원 사이트 소개</a>
+                        <a href="liked_petitions.php">청원 절차</a>
+                    </div>
+                </li>
+                <li><a href="#" class="hover:text-blue-600" onclick="checkLogin('createPetitionModal')">청원 하기</a></li>
+                <li class="dropdown">
+                    <a href="mypage.php" class="hover:text-blue-600">마이페이지</a>
+                    <div class="dropdown-content">
+                        <a href="mypage.php">내가 쓴 청원</a>
+                        <a href="liked_petitions.php">좋아요 한 청원</a>
+                    </div>
+                </li>
                 <li><a href="#" class="hover:text-blue-600">문의하기</a></li>
                 <?php if (isAdmin()) { ?>
-                    <li><a href="#" onclick="openModal('adminModal')" class="hover:text-blue-600">관리자 페이지</a></li>
+                    <li><a href="#" onclick="checkLogin('adminModal')" class="hover:text-blue-600">관리자 페이지</a></li>
                 <?php } ?>
             </ul>
             <div class="flex space-x-4">
@@ -66,7 +112,6 @@
         <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-30 flex flex-col items-center justify-center text-center text-white">
             <h1 class="text-4xl md:text-6xl font-bold">건국대학교 청원</h1>
             <p class="text-sm md:text-lg mt-4">KU petition</p>
-            <button class="mt-6 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded" onclick="openModal('createPetitionModal')">청원하기</button>
         </div>
     </header>
 </body>
