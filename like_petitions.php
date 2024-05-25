@@ -8,7 +8,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['like_petition'])) {
     $userId = $_SESSION['userid'];
 
     if (!$userId) {
+<<<<<<< HEAD
         echo json_encode(["message" => "로그인이 필요합니다.", "status" => "error"]);
+=======
+        echo json_encode(["message" => "로그인이 필요합니다."]);
+>>>>>>> 8f8f86ab80aa31e1233fffea55dc3c523034dc39
         exit();
     }
 
@@ -33,11 +37,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['like_petition'])) {
             $con->query("UPDATE petitions SET is_popular = 1 WHERE id = $petitionId");
         }
 
+<<<<<<< HEAD
         echo json_encode(["message" => "좋아요가 업데이트되었습니다.", "like_count" => $like_count, "status" => "liked"]);
     } else {
         echo json_encode(["message" => "이미 좋아요를 누르셨습니다.", "status" => "already_liked"]);
     }
 } else {
     echo json_encode(["message" => "잘못된 요청입니다.", "status" => "error"]);
+=======
+        echo json_encode(["message" => "좋아요가 업데이트되었습니다.", "like_count" => $like_count]);
+    } else {
+        echo json_encode(["message" => "이미 좋아요를 누르셨습니다."]);
+    }
+} else {
+    echo json_encode(["message" => "잘못된 요청입니다."]);
+>>>>>>> 8f8f86ab80aa31e1233fffea55dc3c523034dc39
 }
 ?>

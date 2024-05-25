@@ -143,7 +143,7 @@
     .dark-mode .border-gray-300 {
         border-color: #4B5563;
     }
-
+    
     .dark-mode .text-gray-700 {
         color: #E5E7EB;
     }
