@@ -20,8 +20,8 @@ require_once 'functions.php';
                 <li class="dropdown">
                     <a href="index.php" class="hover:text-blue-600">청원 소개</a>
                     <div class="dropdown-content">
-                        <a href="mypage.php">청원 사이트 소개</a>
-                        <a href="liked_petitions.php">청원 절차</a>
+                        <a href="petition_site_info.php">청원 사이트 소개</a>
+                        <a href="petition_procedure.php">청원 절차</a>
                     </div>
                 </li>
                 <li><a href="#" class="hover:text-blue-600" onclick="checkLogin('createPetitionModal')">청원 하기</a></li>
@@ -39,8 +39,10 @@ require_once 'functions.php';
             </ul>
             <div class="flex space-x-4">
                 <div class="relative">
-                    <input type="text" class="border px-4 py-2 rounded" placeholder="검색">
-                    <button class="absolute right-2 top-2"><i class="fas fa-search"></i></button>
+                    <form method="GET" action="search.php">
+                        <input type="text" name="query" class="border px-4 py-2 rounded" placeholder="검색">
+                        <button class="absolute right-2 top-2"><i class="fas fa-search"></i></button>
+                    </form>
                 </div>
                 <?php if (!isset($_SESSION['userid'])) { ?>
                     <button class="border px-4 py-2 rounded hover:bg-gray-100" onclick="openModal('loginModal')">로그인</button>
@@ -63,7 +65,6 @@ require_once 'functions.php';
         </div>
         <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-30 flex flex-col items-center justify-center text-center text-white">
             <h1 class="text-4xl md:text-6xl font-bold">건국대학교 청원</h1>
-            <p class="text-sm md:text-lg mt-4">KU petition</p>
         </div>
     </header>
 
