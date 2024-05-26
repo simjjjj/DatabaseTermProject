@@ -243,6 +243,18 @@ document.getElementById('student-id').addEventListener('change', function() {
     </div>
 </div>
 
+<div id="contactModal" class="fixed inset-0 hidden modal flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">문의하기</h2>
+            <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('contactModal')">&times;</button>
+        </div>
+        <p class="mb-4">나 방승재다 전화박아라</p>
+        <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700" onclick="closeModal('contactModal')">확인</button>
+    </div>
+</div>
+
+
 <script>
 document.getElementById('student-id').addEventListener('change', function() {
     const fileName = this.files[0] ? this.files[0].name : '선택된 파일 없음';

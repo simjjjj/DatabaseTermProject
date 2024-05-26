@@ -76,6 +76,10 @@ require_once 'functions.php';
             document.getElementById(id).classList.remove('hidden');
         }
 
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
         function checkLogin(modalId) {
             <?php if (!isset($_SESSION['userid'])) { ?>
                 document.getElementById('messageText').innerText = "로그인 후 이용 가능합니다.";
@@ -83,6 +87,10 @@ require_once 'functions.php';
             <?php } else { ?>
                 openModal(modalId);
             <?php } ?>
+        }
+
+        function showContactMessage() {
+            openModal('contactModal');
         }
 
         function toggleDarkMode() {
