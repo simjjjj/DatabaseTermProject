@@ -1,10 +1,15 @@
 <?php
 include 'config.php';
 
+// 세션 시작
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 header('Content-Type: application/json');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_petition'])) {
-    $petitionId = $_POST['petition_id'];
+    $petitionId = intval($_POST['petition_id']);
     $userId = $_SESSION['userid'];
 
     // 청원이 현재 사용자에 의해 작성되었는지 확인
@@ -23,5 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_petition'])) {
         echo json_encode(["status" => "error", "message" => "권한이 없습니다."]);
     }
     exit();
+} else {
+    echo json_encode(["status" => "error", "message" => "잘못된 요청입니다."]);
 }
 ?>

@@ -9,66 +9,18 @@ require_once 'functions.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>건국대학교 청원</title>
     <?php include 'styles.php'; ?>
-    <style>
-        nav ul li a {
-            font-size: 1rem; /* 글씨 크기 조정 */
-            font-weight: bold;  /* 글씨 두께를 조정 (옵션) */
-        }
-
-        nav ul li a:hover {
-            color: #1D4ED8;
-            transition: color 0.3s ease-in-out;
-        }
-
-        /* 드롭다운 메뉴 스타일 */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* 카드 호버 애니메이션 */
-        .petition-card:hover {
-            transform: scale(1.05);
-            transition: transform 0.3s ease-in-out;
-        }
-    </style>
 </head>
 <body class="dark-mode">
     <nav class="bg-white shadow fixed top-0 left-0 w-full z-50">
         <div class="container mx-auto flex items-center justify-between py-4 px-6">
-            <a href="index.php  ">
+            <a href="index.php">
                 <img src="kulogo.png" alt="Konkuk University Logo" class="h-12">
             </a>
             <ul class="flex space-x-6">
-<<<<<<< HEAD
                 <li class="dropdown">
                     <a href="index.php" class="hover:text-blue-600">청원 소개</a>
                     <div class="dropdown-content">
-                    <a href="mypage.php">청원 사이트 소개</a>
+                        <a href="mypage.php">청원 사이트 소개</a>
                         <a href="liked_petitions.php">청원 절차</a>
                     </div>
                 </li>
@@ -80,12 +32,7 @@ require_once 'functions.php';
                         <a href="liked_petitions.php">좋아요 한 청원</a>
                     </div>
                 </li>
-=======
-                <li><a href="#" class="hover:text-blue-600">청원 소개</a></li>
-                <li><a href="#" class="hover:text-blue-600" onclick="checkLogin('createPetitionModal')">청원 하기</a></li>
-                <li><a href="#" class="hover:text-blue-600" onclick="checkLogin('mypageModal')">마이페이지</a></li>
->>>>>>> 8f8f86ab80aa31e1233fffea55dc3c523034dc39
-                <li><a href="#" class="hover:text-blue-600">문의하기</a></li>
+                <li><a href="#" class="hover:text-blue-600" onclick="showContactMessage()">문의하기</a></li>
                 <?php if (isAdmin()) { ?>
                     <li><a href="#" onclick="checkLogin('adminModal')" class="hover:text-blue-600">관리자 페이지</a></li>
                 <?php } ?>
@@ -108,8 +55,6 @@ require_once 'functions.php';
             </div>
         </div>
     </nav>
-
-<<<<<<< HEAD
     <header class="relative pt-20">
         <div class="slideshow-container">
             <img src="https://placehold.co/1920x600?text=1" class="slides fade">
@@ -121,19 +66,27 @@ require_once 'functions.php';
             <p class="text-sm md:text-lg mt-4">KU petition</p>
         </div>
     </header>
-=======
- <header class="relative pt-20">
-    <div class="slideshow-container">
-        <img src="https://placehold.co/1920x600?text=1" class="slides fade">
-        <img src="https://placehold.co/1920x600?text=2" class="slides fade">
-        <img src="https://placehold.co/1920x600?text=3" class="slides fade">
-    </div>
-    <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-30 flex flex-col items-center justify-center text-center text-white">
-        <h1 class="text-4xl md:text-6xl font-bold">건국대학교 청원</h1>
-        <p class="text-sm md:text-lg mt-4">KU petition</p>
-    </div>
-</header>
 
->>>>>>> 8f8f86ab80aa31e1233fffea55dc3c523034dc39
+    <!-- Modals -->
+    <?php include 'modals.php'; ?>
+
+    <script>
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function checkLogin(modalId) {
+            <?php if (!isset($_SESSION['userid'])) { ?>
+                document.getElementById('messageText').innerText = "로그인 후 이용 가능합니다.";
+                openModal('messageModal');
+            <?php } else { ?>
+                openModal(modalId);
+            <?php } ?>
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
 </body>
 </html>

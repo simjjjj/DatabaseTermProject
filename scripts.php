@@ -72,30 +72,7 @@
 
  
     function likePetition(petitionId) {
-<<<<<<< HEAD
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "like_petitions.php", true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            var response = JSON.parse(xhr.responseText);
-            document.getElementById('messageText').innerText = response.message;
-            openModal('messageModal');
-            if (response.like_count !== undefined) {
-                document.getElementById(`like-count-${petitionId}`).innerText = response.like_count + " Likes";
-            }
-            if (response.status === "liked") {
-                var likeIcon = document.getElementById(`like-icon-${petitionId}`);
-                likeIcon.classList.remove('far');
-                likeIcon.classList.add('fas', 'text-red-500');
-            }
-        }
-    };
-    xhr.send("like_petition=1&petition_id=" + petitionId);
-}
 
-
-=======
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "like_petitions.php", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -111,7 +88,6 @@
         };
         xhr.send("like_petition=1&petition_id=" + petitionId);
     }
->>>>>>> 8f8f86ab80aa31e1233fffea55dc3c523034dc39
 
 
     window.onload = function() {

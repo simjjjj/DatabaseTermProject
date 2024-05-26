@@ -54,7 +54,8 @@ if (isset($_SESSION['message'])) {
         <div id="popular-petition-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <?php
             // 인기 청원 목록 조회
-            $result = $con->query("SELECT * FROM petitions WHERE is_popular = 1");
+            $userId = isset($_SESSION['userid']) ? $_SESSION['userid'] : 0;
+            $result = $con->query("SELECT p.*, l.user_id IS NOT NULL AS liked FROM petitions p LEFT JOIN likes l ON p.id = l.petition_id AND l.user_id = $userId WHERE p.is_popular = 1");
             if ($result) {
                 while ($row = $result->fetch_assoc()) {
                     echo "<div class='bg-white shadow rounded-lg overflow-hidden petition-card'>";
@@ -67,7 +68,8 @@ if (isset($_SESSION['message'])) {
                     echo "<button class='text-blue-600 hover:underline'>자세히 보기</button>";
                     echo "</div>";
                     echo "<div class='mt-4 flex justify-between items-center'>";
-                    echo "<span class='text-gray-600 text-sm'>" . htmlspecialchars($row['likes']) . " Likes</span>";
+                    echo "<button onclick='likePetition(" . $row['id'] . ")' class='text-gray-600 hover:underline'><i class='" . ($row['liked'] ? "fas text-red-600" : "far") . " fa-heart' id='like-icon-" . $row['id'] . "'></i> 좋아요</button>";
+                    echo "<span id='like-count-" . $row['id'] . "' class='text-gray-600 text-sm'>" . htmlspecialchars($row['likes']) . " Likes</span>";
                     echo "</div>";
                     echo "</div>";
                     echo "</div>";
@@ -86,22 +88,9 @@ if (isset($_SESSION['message'])) {
         <div id="petition-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <?php
             // 일반 청원 목록 조회 (인기 청원 제외)
-            $result = $con->query("SELECT * FROM petitions WHERE is_popular = 0");
+            $result = $con->query("SELECT p.*, l.user_id IS NOT NULL AS liked FROM petitions p LEFT JOIN likes l ON p.id = l.petition_id AND l.user_id = $userId WHERE p.is_popular = 0");
             if ($result) {
                 while ($row = $result->fetch_assoc()) {
-                    $petitionId = $row['id'];
-                    $liked = false;
-
-                    // 사용자가 이미 좋아요를 눌렀는지 확인
-                    if (isset($_SESSION['userid'])) {
-                        $userId = $_SESSION['userid'];
-                        $like_check_query = "SELECT * FROM likes WHERE user_id = $userId AND petition_id = $petitionId";
-                        $like_result = $con->query($like_check_query);
-                        if ($like_result->num_rows > 0) {
-                            $liked = true;
-                        }
-                    }
-
                     echo "<div class='bg-white shadow rounded-lg overflow-hidden petition-card'>";
                     echo "<img src='https://placehold.co/300x200?text=' alt='Petition image' class='w-full h-48 object-cover'>";
                     echo "<div class='p-4'>";
@@ -112,11 +101,7 @@ if (isset($_SESSION['message'])) {
                     echo "<button class='text-blue-600 hover:underline'>자세히 보기</button>";
                     echo "</div>";
                     echo "<div class='mt-4 flex justify-between items-center'>";
-<<<<<<< HEAD
-                    echo "<button onclick='likePetition(" . $row['id'] . ")' class='text-gray-600 hover:underline'><i id='like-icon-" . $row['id'] . "' class='" . ($liked ? "fas text-red-500" : "far") . " fa-heart'></i> 좋아요</button>";
-=======
-                    echo "<button onclick='likePetition(" . $row['id'] . ")' class='text-gray-600 hover:underline'><i class='far fa-heart'></i> 좋아요</button>";
->>>>>>> 8f8f86ab80aa31e1233fffea55dc3c523034dc39
+                    echo "<button onclick='likePetition(" . $row['id'] . ")' class='text-gray-600 hover:underline'><i class='" . ($row['liked'] ? "fas text-red-600" : "far") . " fa-heart' id='like-icon-" . $row['id'] . "'></i> 좋아요</button>";
                     echo "<span id='like-count-" . $row['id'] . "' class='text-gray-600 text-sm'>" . htmlspecialchars($row['likes']) . " Likes</span>";
                     echo "</div>";
                     echo "</div>";
@@ -132,9 +117,6 @@ if (isset($_SESSION['message'])) {
         </div>
     </div>
 </section>
-
-
-
 
 <?php include 'footer.php'; ?>
 <?php include 'modals.php'; ?>
@@ -201,4 +183,38 @@ if (isset($_SESSION['message'])) {
         xhr.send();
     }
 
-   
+    function checkLogin(modalId) {
+        <?php if (!isset($_SESSION['userid'])) { ?>
+            document.getElementById('messageText').innerText = "로그인 후 이용 가능합니다.";
+            openModal('messageModal');
+        <?php } else { ?>
+            openModal(modalId);
+        <?php } ?>
+    }
+
+    function likePetition(petitionId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "handle_likes.php", true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var response = JSON.parse(xhr.responseText);
+                document.getElementById('messageText').innerText = response.message;
+                openModal('messageModal');
+                if (response.like_count !== undefined) {
+                    document.getElementById(`like-count-${petitionId}`).innerText = response.like_count + " Likes";
+                    document.getElementById(`like-icon-${petitionId}`).classList.remove('far');
+                    document.getElementById(`like-icon-${petitionId}`).classList.add('fas', 'text-red-600');
+                }
+            }
+        };
+        xhr.send("like_petition=1&petition_id=" + petitionId);
+    }
+
+    window.onload = function() {
+        <?php if ($message) { ?>
+            document.getElementById('messageText').innerText = "<?php echo $message; ?>";
+            openModal('messageModal');
+        <?php } ?>
+    }
+</script>

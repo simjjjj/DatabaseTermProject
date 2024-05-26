@@ -37,9 +37,15 @@
         to {opacity: 1}
     }
 
-    /* 글씨 크기 조정 */
+    /* 글씨 크기 및 메뉴 간격 조정 */
     nav ul li a {
-        font-size: 1.25rem; 
+        font-size: 1rem; /* 약간 큰 글씨 크기 */
+        font-family: 'Noto Sans KR', sans-serif; /* 인기 청원 글꼴과 동일하게 설정 */
+        font-weight: bold;  /* 글씨 두께를 조정 (옵션) */
+    }
+
+    nav ul {
+        gap: 1.5rem; /* 메뉴 간격을 넓게 설정 */
     }
 
     /* 네비게이션 바 애니메이션 */
