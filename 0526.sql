@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS likes (
     user_id INT NOT NULL,
     liked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE (petition_id, user_id) -- 중복 좋아요 방지를 위해 UNIQUE 제약 조건 추가
 );
 
 -- 테이블 구조 확인 및 초기 데이터 관리
