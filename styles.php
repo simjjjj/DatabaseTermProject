@@ -103,6 +103,14 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
+    /* 삭제 수정버튼 */
+    .button-edit {
+        @apply text-blue-600 hover:text-blue-800 font-semibold;
+    }
+    .button-delete {
+        @apply text-red-600 hover:text-red-800 font-semibold;
+    }
+
     /* 다크 모드 */
     .dark-mode {
         background-color: #121212;
