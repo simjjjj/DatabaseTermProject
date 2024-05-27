@@ -1,9 +1,10 @@
 <?php
-// config.php 파일 내용을 포함시킵니다.
 include 'config.php';
 
-// 세션을 시작합니다.
-session_start();
+// 이미 세션이 시작된 경우를 확인하고 세션을 시작합니다.
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // POST 요청이면서 'create_petition' 값이 설정된 경우 청원 등록을 처리합니다.
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_petition'])) {
@@ -21,21 +22,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_petition'])) {
     $user_id = $_SESSION['userid'];
     $created_at = date('Y-m-d H:i:s');
 
-    // 청원 등록 시도를 기록합니다.
-    error_log("청원 등록 시도: $title, $content, $category, $created_at, $user_id");
+    // 파일 업로드 처리
+    $file_dest = '';
+    if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] == UPLOAD_ERR_OK) {
+        $file_tmp = $_FILES['attachment']['tmp_name'];
+        $file_name = basename($_FILES['attachment']['name']);
+        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+        $valid_extensions = array('jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx');
+        if (in_array($file_ext, $valid_extensions)) {
+            $new_file_name = uniqid('', true) . '.' . $file_ext;
+            $file_dest = "uploads_petition/" . $new_file_name;
+            if (!move_uploaded_file($file_tmp, $file_dest)) {
+                $_SESSION['message'] = "파일 업로드에 실패했습니다. 에러 코드: " . $_FILES['attachment']['error'];
+                header("Location: index.php");
+                exit();
+            }
+        } else {
+            $_SESSION['message'] = "잘못된 파일 형식입니다.";
+            header("Location: index.php");
+            exit();
+        }
+    }
 
     // 데이터베이스에 청원을 등록하는 쿼리를 실행합니다.
-    $sql = "INSERT INTO petitions (user_id, title, content, category, created_at) VALUES ('$user_id', '$title', '$content', '$category', '$created_at')";
+    $sql = "INSERT INTO petitions (user_id, title, content, category, created_at, attachment) VALUES ('$user_id', '$title', '$content', '$category', '$created_at', '$file_dest')";
 
     if ($con->query($sql) === TRUE) {
         // 청원 등록 성공을 기록하고 메시지를 설정한 후 메인 페이지로 리디렉션합니다.
-        error_log("청원 등록 성공: $title");
         $_SESSION['message'] = "청원이 성공적으로 등록되었습니다.";
         header("Location: index.php");
         exit();
     } else {
         // 청원 등록 오류를 기록하고 메시지를 설정한 후 메인 페이지로 리디렉션합니다.
-        error_log("청원 등록 오류: " . $con->error);
         $_SESSION['message'] = "오류: " . $con->error;
         header("Location: index.php");
         exit();
@@ -60,12 +78,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_petition'])) {
     }
     ?>
     <!-- 청원 등록 폼을 출력합니다. -->
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         <label for="title">제목:</label>
         <input type="text" id="title" name="title" required><br><br>
 
         <label for="content">내용:</label>
         <textarea id="content" name="content" required></textarea><br><br>
+
+        <label for="attachment">첨부 파일:</label>
+        <input type="file" id="attachment" name="attachment"><br><br>
 
         <label for="category">카테고리:</label>
         <input type="text" id="category" name="category" required><br><br>

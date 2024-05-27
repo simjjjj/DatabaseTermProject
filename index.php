@@ -92,7 +92,6 @@ if (isset($_SESSION['message'])) {
             if ($result) {
                 while ($row = $result->fetch_assoc()) {
                     echo "<div class='bg-white shadow rounded-lg overflow-hidden petition-card'>";
-                    echo "<img src='https://placehold.co/300x200?text=' alt='Petition image' class='w-full h-48 object-cover'>";
                     echo "<div class='p-4'>";
                     echo "<h3 class='font-bold text-lg'>" . htmlspecialchars($row['title']) . "</h3>";
                     echo "<p class='text-sm mt-2 text-gray-700'>" . htmlspecialchars($row['content']) . "</p>";
