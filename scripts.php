@@ -70,9 +70,7 @@
         <?php } ?>
     }
 
- 
     function likePetition(petitionId) {
-
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "like_petitions.php", true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -83,12 +81,13 @@
                 openModal('messageModal');
                 if (response.like_count !== undefined) {
                     document.getElementById(`like-count-${petitionId}`).innerText = response.like_count + " Likes";
+                    document.getElementById(`like-icon-${petitionId}`).classList.remove('far');
+                    document.getElementById(`like-icon-${petitionId}`).classList.add('fas', 'text-red-600');
                 }
             }
         };
         xhr.send("like_petition=1&petition_id=" + petitionId);
     }
-
 
     window.onload = function() {
         <?php if ($message) { ?>

@@ -26,10 +26,10 @@ require_once 'functions.php';
                 </li>
                 <li><a href="#" class="hover:text-blue-600" onclick="checkLogin('createPetitionModal')">청원 하기</a></li>
                 <li class="dropdown">
-                    <a href="mypage.php" class="hover:text-blue-600">마이페이지</a>
+                    <a href="#" class="hover:text-blue-600">마이페이지</a>
                     <div class="dropdown-content">
-                        <a href="mypage.php">내가 쓴 청원</a>
-                        <a href="liked_petitions.php">좋아요 한 청원</a>
+                        <a href="#" onclick="checkLoginRedirect('mypage.php')">내가 쓴 청원</a>
+                        <a href="#" onclick="checkLoginRedirect('liked_petitions.php')">좋아요 한 청원</a>
                     </div>
                 </li>
                 <li><a href="#" class="hover:text-blue-600" onclick="showContactMessage()">문의하기</a></li>
@@ -48,7 +48,7 @@ require_once 'functions.php';
                     <button class="border px-4 py-2 rounded hover:bg-gray-100" onclick="openModal('loginModal')">로그인</button>
                     <button class="border px-4 py-2 rounded hover:bg-gray-100" onclick="openModal('registerModal')">회원가입</button>
                 <?php } else { ?>
-                    <form method="post">
+                    <form method="post" action="logout.php">
                         <input type="hidden" name="logout" value="1">
                         <button type="submit" class="border px-4 py-2 rounded hover:bg-gray-100">로그아웃</button>
                     </form>
@@ -86,6 +86,15 @@ require_once 'functions.php';
                 openModal('messageModal');
             <?php } else { ?>
                 openModal(modalId);
+            <?php } ?>
+        }
+
+        function checkLoginRedirect(destination) {
+            <?php if (!isset($_SESSION['userid'])) { ?>
+                document.getElementById('messageText').innerText = "로그인 후 이용 가능합니다.";
+                openModal('messageModal');
+            <?php } else { ?>
+                window.location.href = destination;
             <?php } ?>
         }
 

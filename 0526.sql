@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS petitions (
     is_popular TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    attachment VARCHAR(255),  -- 첨부 파일 경로 저장
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -50,7 +51,7 @@ CREATE TABLE IF NOT EXISTS likes (
     UNIQUE (petition_id, user_id) -- 중복 좋아요 방지를 위해 UNIQUE 제약 조건 추가
 );
 
--- 테이블 구조 확인 및 초기 데이터 관리
+-- 테이블 구조 확인
 DESCRIBE users;
 DESCRIBE petitions;
 DESCRIBE signatures;
@@ -65,17 +66,11 @@ SELECT * FROM petitions;
 SELECT * FROM signatures;
 SELECT * FROM likes;
 
--- 데이터 초기화
-TRUNCATE TABLE users;
-TRUNCATE TABLE petitions;
-TRUNCATE TABLE signatures;
-TRUNCATE TABLE likes;
-
--- 모든 데이터 삭제
-DELETE FROM users;
-DELETE FROM petitions;
-DELETE FROM signatures;
+-- 데이터 초기화 및 삭제 (참조 무결성 제약 조건을 피하기 위해 순서 주의)
 DELETE FROM likes;
+DELETE FROM signatures;
+DELETE FROM petitions;
+DELETE FROM users;
 
 -- 데이터베이스 삭제
 DROP DATABASE IF EXISTS konkuk_petition;

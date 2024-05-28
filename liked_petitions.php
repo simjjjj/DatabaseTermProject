@@ -18,7 +18,6 @@ $result = $con->query("SELECT p.* FROM petitions p INNER JOIN likes l ON p.id = 
         <?php if ($result && $result->num_rows > 0) { 
             while ($row = $result->fetch_assoc()) { ?>
                 <div class='bg-white shadow-lg rounded-lg overflow-hidden petition-card'>
-                    <img src='https://placehold.co/300x200?text=' alt='Petition image' class='w-full h-48 object-cover'>
                     <div class='p-4'>
                         <h3 class='font-bold text-lg'><?php echo htmlspecialchars($row['title']); ?></h3>
                         <p class='text-sm mt-2 text-gray-700'><?php echo htmlspecialchars($row['content']); ?></p>
