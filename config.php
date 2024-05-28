@@ -1,26 +1,19 @@
 <?php
-// 세션 시작
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 데이터베이스 연결 설정
 $db_host = "localhost";
 $db_user = "root";
-$db_password = "1234";
+$db_password = "63831893";
 $db_name = "konkuk_petition";
 
-// 데이터베이스 연결
 $con = new mysqli($db_host, $db_user, $db_password, $db_name);
 if ($con->connect_error) {
     error_log("데이터베이스 연결 실패: " . $con->connect_error);
     exit();
 }
 
-
-
-
-// 회원가입 처리
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
     $name = $con->real_escape_string($_POST['name']);
     $username = $con->real_escape_string($_POST['username']);
@@ -35,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
         exit();
     }
 
-    // 이메일 중복 확인
     $check_email_query = "SELECT * FROM users WHERE email = '$email'";
     $result = $con->query($check_email_query);
     if ($result->num_rows > 0) {
