@@ -70,6 +70,26 @@
         <?php } ?>
     }
 
+    function logout(event) {
+        event.preventDefault();
+        const formData = new FormData(document.getElementById('logout-form'));
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "logout.php", true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const response = JSON.parse(xhr.responseText);
+                document.getElementById('messageText').innerText = response.message;
+                openModal('messageModal');
+                if (response.status === 'success') {
+                    setTimeout(() => {
+                        window.location.href = "index.php";
+                    }, 2000);
+                }
+            }
+        };
+        xhr.send(formData);
+    }
+
     function likePetition(petitionId) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "like_petitions.php", true);

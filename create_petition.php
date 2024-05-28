@@ -1,10 +1,6 @@
 <?php
 include 'config.php';
 
-<<<<<<< HEAD
-=======
-// 이미 세션이 시작된 경우를 확인하고 세션을 시작합니다.
->>>>>>> 1fa85a930e0603d5956f974b1685c41bd8d8358f
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -22,10 +18,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_petition'])) {
     $user_id = $_SESSION['userid'];
     $created_at = date('Y-m-d H:i:s');
 
-<<<<<<< HEAD
-=======
-    // 파일 업로드 처리
->>>>>>> 1fa85a930e0603d5956f974b1685c41bd8d8358f
     $file_dest = '';
     if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] == UPLOAD_ERR_OK) {
         $file_tmp = $_FILES['attachment']['tmp_name'];
@@ -47,25 +39,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_petition'])) {
         }
     }
 
-<<<<<<< HEAD
     $sql = "INSERT INTO petitions (user_id, title, content, category, created_at, attachment) VALUES ('$user_id', '$title', '$content', '$category', '$created_at', '$file_dest')";
 
     if ($con->query($sql) === TRUE) {
-=======
-    // 데이터베이스에 청원을 등록하는 쿼리를 실행합니다.
-    $sql = "INSERT INTO petitions (user_id, title, content, category, created_at, attachment) VALUES ('$user_id', '$title', '$content', '$category', '$created_at', '$file_dest')";
-
-    if ($con->query($sql) === TRUE) {
-        // 청원 등록 성공을 기록하고 메시지를 설정한 후 메인 페이지로 리디렉션합니다.
->>>>>>> 1fa85a930e0603d5956f974b1685c41bd8d8358f
         $_SESSION['message'] = "청원이 성공적으로 등록되었습니다.";
         header("Location: index.php");
         exit();
     } else {
-<<<<<<< HEAD
-=======
-        // 청원 등록 오류를 기록하고 메시지를 설정한 후 메인 페이지로 리디렉션합니다.
->>>>>>> 1fa85a930e0603d5956f974b1685c41bd8d8358f
         $_SESSION['message'] = "오류: " . $con->error;
         header("Location: index.php");
         exit();
@@ -88,10 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create_petition'])) {
         unset($_SESSION['message']);
     }
     ?>
-<<<<<<< HEAD
-=======
-    <!-- 청원 등록 폼을 출력합니다. -->
->>>>>>> 1fa85a930e0603d5956f974b1685c41bd8d8358f
     <form action="" method="post" enctype="multipart/form-data">
         <label for="title">제목:</label>
         <input type="text" id="title" name="title" required><br><br>

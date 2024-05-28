@@ -3,7 +3,7 @@ include 'config.php';
 include 'functions.php';
 
 $message = '';
-// 로그인 처리
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     $username = $con->real_escape_string($_POST['username']);
     $password = $_POST['password'];
@@ -30,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     }
 }
 
-// 로그아웃 처리
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     session_destroy();
     session_start();
@@ -39,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     exit();
 }
 
-// 메시지가 설정되면 자바스크립트로 전달
 if (isset($_SESSION['message'])) {
     $message = $_SESSION['message'];
     unset($_SESSION['message']);
@@ -53,7 +51,6 @@ if (isset($_SESSION['message'])) {
         <h2 class="text-3xl font-bold mb-6">인기 청원</h2>
         <div id="popular-petition-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <?php
-            // 인기 청원 목록 조회
             $userId = isset($_SESSION['userid']) ? $_SESSION['userid'] : 0;
             $result = $con->query("SELECT p.*, l.user_id IS NOT NULL AS liked FROM petitions p LEFT JOIN likes l ON p.id = l.petition_id AND l.user_id = $userId WHERE p.is_popular = 1");
             if ($result) {
@@ -87,7 +84,6 @@ if (isset($_SESSION['message'])) {
         <h2 class="text-3xl font-bold mb-6">청원 안내</h2>
         <div id="petition-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <?php
-            // 일반 청원 목록 조회 (인기 청원 제외)
             $result = $con->query("SELECT p.*, l.user_id IS NOT NULL AS liked FROM petitions p LEFT JOIN likes l ON p.id = l.petition_id AND l.user_id = $userId WHERE p.is_popular = 0");
             if ($result) {
                 while ($row = $result->fetch_assoc()) {

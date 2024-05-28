@@ -71,7 +71,6 @@ $result = $con->query("SELECT * FROM petitions WHERE user_id = $userId");
     </div>
 </div>
 
-<!-- 청원 수정 모달 -->
 <div id="edit-petition-modal" class="fixed inset-0 hidden modal flex items-center justify-center">
     <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
         <div class="flex justify-between items-center mb-6">
@@ -98,6 +97,9 @@ $result = $con->query("SELECT * FROM petitions WHERE user_id = $userId");
 </div>
 
 <?php include 'footer.php'; ?>
+<?php include 'modals.php'; ?> <!-- 모달 창 포함 -->
+    <script src="scripts.php"></script>
+
 
 <script>
 let petitionIdToDelete;

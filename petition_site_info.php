@@ -47,5 +47,7 @@ include 'header.php';
         </div>
     </div>
     <?php include 'footer.php'; ?>
+    <?php include 'modals.php'; ?> <!-- 모달 창 포함 -->
+    <script src="scripts.php"></script>
 </body>
 </html>

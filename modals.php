@@ -68,7 +68,7 @@
     </div>
 </div>
 
-<div id="createPetitionModal" class="fixed inset-0 hidden modal flex items-center justify-center">
+<<div id="createPetitionModal" class="fixed inset-0 hidden modal flex items-center justify-center">
     <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold">청원하기</h2>
@@ -85,7 +85,7 @@
                 <textarea id="petition-content" name="content" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required></textarea>
             </div>
             <div class="mb-4">
-                <label for="petition-attachment" class="block text-sm font-medium text-gray-700">첨부파일</label>
+                <label for="petition-attachment" class="block text-sm font-medium text-gray-700">첨부 파일</label>
                 <div class="flex items-center">
                     <label for="petition-attachment" class="cursor-pointer inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                         <i class="fas fa-upload mr-2"></i> 파일 선택
@@ -102,6 +102,7 @@
         </form>
     </div>
 </div>
+
 
 <div id="messageModal" class="fixed inset-0 hidden modal flex items-center justify-center">
     <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">

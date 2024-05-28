@@ -12,7 +12,6 @@
             <h2 class="text-3xl font-bold mb-6">인기 청원</h2>
             <div id="popular-petition-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <?php
-                // 인기 청원 목록 조회
                 $result = $con->query("SELECT * FROM petitions WHERE is_popular = 1");
                 if ($result) {
                     while ($row = $result->fetch_assoc()) {

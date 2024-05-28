@@ -11,6 +11,16 @@ require_once 'functions.php';
     <?php include 'styles.php'; ?>
 </head>
 <body class="dark-mode">
+    <header class="relative pt-20">
+        <div class="slideshow-container">
+            <img src="a2.jpg" class="slides fade">
+            <img src="a2.jpg" class="slides fade">
+            <img src="a2.jpg" class="slides fade">
+        </div>
+        <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-30 flex flex-col items-center justify-center text-center text-white">
+            <h1 class="text-4xl md:text-6xl font-bold">건국대학교 청원</h1>
+        </div>
+    </header>
     <nav class="bg-white shadow fixed top-0 left-0 w-full z-50">
         <div class="container mx-auto flex items-center justify-between py-4 px-6">
             <a href="index.php">
@@ -48,7 +58,7 @@ require_once 'functions.php';
                     <button class="border px-4 py-2 rounded hover:bg-gray-100" onclick="openModal('loginModal')">로그인</button>
                     <button class="border px-4 py-2 rounded hover:bg-gray-100" onclick="openModal('registerModal')">회원가입</button>
                 <?php } else { ?>
-                    <form method="post" action="logout.php">
+                    <form id="logout-form" method="post" onsubmit="logout(event)">
                         <input type="hidden" name="logout" value="1">
                         <button type="submit" class="border px-4 py-2 rounded hover:bg-gray-100">로그아웃</button>
                     </form>
@@ -57,19 +67,137 @@ require_once 'functions.php';
             </div>
         </div>
     </nav>
-    <header class="relative pt-20">
-        <div class="slideshow-container">
-            <img src="https://placehold.co/1920x600?text=1" class="slides fade">
-            <img src="https://placehold.co/1920x600?text=2" class="slides fade">
-            <img src="https://placehold.co/1920x600?text=3" class="slides fade">
-        </div>
-        <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-30 flex flex-col items-center justify-center text-center text-white">
-            <h1 class="text-4xl md:text-6xl font-bold">건국대학교 청원</h1>
-        </div>
-    </header>
 
     <!-- Modals -->
-    <?php include 'modals.php'; ?>
+    <div id="createPetitionModal" class="fixed inset-0 hidden modal flex items-center justify-center">
+        <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">청원하기</h2>
+                <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('createPetitionModal')">&times;</button>
+            </div>
+            <form method="post" action="create_petition.php" enctype="multipart/form-data">
+                <input type="hidden" name="create_petition" value="1">
+                <div class="mb-4">
+                    <label for="petition-title" class="block text-sm font-medium text-gray-700">제목</label>
+                    <input type="text" id="petition-title" name="title" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                </div>
+                <div class="mb-4">
+                    <label for="petition-content" class="block text-sm font-medium text-gray-700">내용</label>
+                    <textarea id="petition-content" name="content" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="petition-attachment" class="block text-sm font-medium text-gray-700">첨부 파일</label>
+                    <div class="flex items-center">
+                        <label for="petition-attachment" class="cursor-pointer inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            <i class="fas fa-upload mr-2"></i> 파일 선택
+                        </label>
+                        <input type="file" id="petition-attachment" name="attachment" class="hidden">
+                        <span id="petition-attachment-filename" class="ml-2 text-sm text-gray-600"></span>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="petition-category" class="block text-sm font-medium text-gray-700">카테고리</label>
+                    <input type="text" id="petition-category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">청원하기</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="loginModal" class="fixed inset-0 hidden modal flex items-center justify-center">
+        <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">로그인</h2>
+                <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('loginModal')">&times;</button>
+            </div>
+            <form method="post">
+                <input type="hidden" name="login" value="1">
+                <div class="mb-4">
+                    <label for="login-username" class="block text-sm font-medium text-gray-700">아이디</label>
+                    <input type="text" id="login-username" name="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="login-password" class="block text-sm font-medium text-gray-700">비밀번호</label>
+                    <input type="password" id="login-password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">로그인</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="registerModal" class="fixed inset-0 hidden modal flex items-center justify-center">
+        <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">회원가입</h2>
+                <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('registerModal')">&times;</button>
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" name="signup" value="1">
+                <div class="mb-4">
+                    <label for="register-name" class="block text-sm font-medium text-gray-700">이름</label>
+                    <input type="text" id="register-name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="register-username" class="block text-sm font-medium text-gray-700">아이디</label>
+                    <input type="text" id="register-username" name="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="register-password" class="block text-sm font-medium text-gray-700">비밀번호</label>
+                    <input type="password" id="register-password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="register-password-confirm" class="block text-sm font-medium text-gray-700">비밀번호 확인</label>
+                    <input type="password" id="register-password-confirm" name="password_confirm" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="register-email" class="block text-sm font-medium text-gray-700">이메일</label>
+                    <input type="email" id="register-email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="register-student-id" class="block text-sm font-medium text-gray-700">학생증 인증</label>
+                    <div class="flex items-center">
+                        <label for="student-id" class="cursor-pointer inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            <i class="fas fa-upload mr-2"></i> 파일 선택
+                        </label>
+                        <input type="file" id="student-id" name="student_id" class="hidden">
+                        <span id="student-id-filename" class="ml-2 text-sm text-gray-600"></span>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="register-admin" class="inline-flex items-center">
+                        <input type="checkbox" id="register-admin" name="is_admin" class="form-checkbox">
+                        <span class="ml-2 text-sm font-medium text-gray-700">관리자 여부</span>
+                    </label>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">회원가입</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="messageModal" class="fixed inset-0 hidden modal flex items-center justify-center">
+        <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">알림</h2>
+                <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('messageModal')">&times;</button>
+            </div>
+            <p id="messageText" class="mb-4"></p>
+            <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700" onclick="closeModal('messageModal')">확인</button>
+        </div>
+    </div>
+
+    <div id="contactModal" class="fixed inset-0 hidden modal flex items-center justify-center">
+        <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">문의하기</h2>
+                <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('contactModal')">&times;</button>
+            </div>
+            <p class="mb-4">나 방승재다 전화박아라</p>
+            <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700" onclick="closeModal('contactModal')">확인</button>
+        </div>
+    </div>
+</body>
+</html>
+
 
     <script>
         function openModal(id) {
@@ -104,6 +232,25 @@ require_once 'functions.php';
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
+        }
+
+        function logout() {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "logout.php", true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.status === 'success') {
+                        document.getElementById('messageText').innerText = response.message;
+                        openModal('messageModal');
+                        setTimeout(() => {
+                            window.location.href = "index.php";
+                        }, 2000);
+                    }
+                }
+            };
+            xhr.send("logout=1");
         }
     </script>
 </body>

@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = $con->real_escape_string($_POST['title']);
     $content = $con->real_escape_string($_POST['content']);
     $category = $con->real_escape_string($_POST['category']);
-    
+
     $update_query = "UPDATE petitions SET title = '$title', content = '$content', category = '$category' WHERE id = $petitionId";
     if ($con->query($update_query) === TRUE) {
         echo json_encode(["status" => "success", "message" => "청원이 성공적으로 수정되었습니다."]);
