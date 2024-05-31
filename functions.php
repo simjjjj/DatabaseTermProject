@@ -37,4 +37,16 @@ function getCommentsByPetitionId($con, $petition_id) {
     $stmt->execute();
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
+
+function isLoggedIn() {
+    return isset($_SESSION['userid']);
+}
+
+function requireLogin() {
+    if (!isLoggedIn()) {
+        $_SESSION['message'] = "로그인이 필요합니다.";
+        header("Location: index.php");
+        exit();
+    }
+}
 ?>

@@ -34,13 +34,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['logout'])) {
     session_destroy();
     session_start();
     $_SESSION['message'] = "성공적으로 로그아웃되었습니다.";
-    header("Location: index.php");
-    exit();
 }
 
 if (isset($_SESSION['message'])) {
     $message = $_SESSION['message'];
     unset($_SESSION['message']);
+    echo "<script>
+        window.onload = function() {
+            document.getElementById('messageText').innerText = '{$message}';
+            openModal('messageModal');
+        }
+    </script>";
 }
 ?>
 

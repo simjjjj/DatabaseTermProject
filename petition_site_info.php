@@ -1,7 +1,7 @@
 <?php
 include 'config.php';
 require_once 'functions.php';
-include 'header.php';
+include 'header.php'; // Include the header file for the navigation bar and modals
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +47,6 @@ include 'header.php';
         </div>
     </div>
     <?php include 'footer.php'; ?>
-    <?php include 'modals.php'; ?> <!-- 모달 창 포함 -->
     <script src="scripts.php"></script>
 </body>
 </html>

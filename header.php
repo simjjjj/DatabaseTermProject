@@ -59,7 +59,7 @@ require_once 'functions.php';
                     <button class="border px-4 py-2 rounded hover:bg-gray-100" onclick="openModal('loginModal')">로그인</button>
                     <button class="border px-4 py-2 rounded hover:bg-gray-100" onclick="openModal('registerModal')">회원가입</button>
                 <?php } else { ?>
-                    <form id="logout-form" method="post" onsubmit="logout(event)">
+                    <form id="logout-form" method="post" action="index.php">
                         <input type="hidden" name="logout" value="1">
                         <button type="submit" class="border px-4 py-2 rounded hover:bg-gray-100">로그아웃</button>
                     </form>
@@ -111,7 +111,7 @@ require_once 'functions.php';
                 <h2 class="text-2xl font-bold">로그인</h2>
                 <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('loginModal')">&times;</button>
             </div>
-            <form method="post">
+            <form method="post" action="index.php">
                 <input type="hidden" name="login" value="1">
                 <div class="mb-4">
                     <label for="login-username" class="block text-sm font-medium text-gray-700">아이디</label>
@@ -132,7 +132,7 @@ require_once 'functions.php';
                 <h2 class="text-2xl font-bold">회원가입</h2>
                 <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('registerModal')">&times;</button>
             </div>
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" action="register.php" enctype="multipart/form-data">
                 <input type="hidden" name="signup" value="1">
                 <div class="mb-4">
                     <label for="register-name" class="block text-sm font-medium text-gray-700">이름</label>
@@ -200,59 +200,68 @@ require_once 'functions.php';
 </html>
 
 
-    <script>
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
+<script>
+function openModal(id) {
+    document.getElementById(id).classList.remove('hidden');
+    document.getElementById(id).style.display = "flex"; // Display flex for centering
+}
 
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
+function closeModal(id) {
+    document.getElementById(id).classList.add('hidden');
+    document.getElementById(id).style.display = "none";
+}
 
-        function checkLogin(modalId) {
-            <?php if (!isset($_SESSION['userid'])) { ?>
-                document.getElementById('messageText').innerText = "로그인 후 이용 가능합니다.";
-                openModal('messageModal');
-            <?php } else { ?>
-                openModal(modalId);
-            <?php } ?>
-        }
+function checkLogin(modalId) {
+    <?php if (!isset($_SESSION['userid'])) { ?>
+        document.getElementById('messageText').innerText = "로그인 후 이용 가능합니다.";
+        openModal('messageModal');
+    <?php } else { ?>
+        openModal(modalId);
+    <?php } ?>
+}
 
-        function checkLoginRedirect(destination) {
-            <?php if (!isset($_SESSION['userid'])) { ?>
-                document.getElementById('messageText').innerText = "로그인 후 이용 가능합니다.";
-                openModal('messageModal');
-            <?php } else { ?>
-                window.location.href = destination;
-            <?php } ?>
-        }
+function checkLoginRedirect(destination) {
+    <?php if (!isset($_SESSION['userid'])) { ?>
+        document.getElementById('messageText').innerText = "로그인 후 이용 가능합니다.";
+        openModal('messageModal');
+    <?php } else { ?>
+        window.location.href = destination;
+    <?php } ?>
+}
 
-        function showContactMessage() {
-            openModal('contactModal');
-        }
+function showContactMessage() {
+    openModal('contactModal');
+}
 
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+}
 
-        function logout() {
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "logout.php", true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.status === 'success') {
-                        document.getElementById('messageText').innerText = response.message;
-                        openModal('messageModal');
-                        setTimeout(() => {
-                            window.location.href = "index.php";
-                        }, 2000);
-                    }
-                }
-            };
-            xhr.send("logout=1");
+function logout(event) {
+    event.preventDefault();
+    const formData = new FormData(document.getElementById('logout-form'));
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "index.php", true);
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            document.getElementById('messageText').innerText = response.message;
+            openModal('messageModal');
+            if (response.status === 'success') {
+                setTimeout(() => {
+                    window.location.href = "index.php";
+                }, 2000);
+            }
         }
-    </script>
-</body>
-</html>
+    };
+    xhr.send(formData);
+}
+
+window.onload = function() {
+    <?php if (isset($_SESSION['message'])) { ?>
+        document.getElementById('messageText').innerText = "<?php echo $_SESSION['message']; ?>";
+        openModal('messageModal');
+        <?php unset($_SESSION['message']); ?>
+    <?php } ?>
+}
+</script>
