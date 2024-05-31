@@ -29,7 +29,7 @@ include 'header.php'; // Include the header file for the navigation bar and moda
                 <li class="mb-2"><strong>첨부 파일 업로드 (선택 사항):</strong> 필요한 경우 관련된 파일을 첨부할 수 있습니다.</li>
                 <li class="mb-2"><strong>청원 제출:</strong> 작성한 내용을 확인한 후 청원을 제출합니다.</li>
                 <li class="mb-2"><strong>청원 검토:</strong> 제출된 청원은 관리자가 검토하여 승인 여부를 결정합니다.</li>
-                <li class="mb-2"><strong>청원 공개:</strong> 관리자가 승인한 청원은 사이트에 공개되어 다른 학생들이 열람하고 참여할 수 있습니다.</li>
+                <li class="mb-2"><strong>청원 공개:</strong> 관리자가 승인한 청원은 사이트에 공개되어 다른 학생들이 열람하고 참여할 수 있습니다</li>
             </ol>
         </div>
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
