@@ -46,14 +46,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['signup'])) {
         }
     }
 
-    $sql = "INSERT INTO users (name, username, password, email, student_id, is_admin) VALUES ('$name', '$username', '$password', '$email', '$student_id', '$is_admin')";
-
-    if ($con->query($sql) === TRUE) {
-        $_SESSION['message'] = "계정이 성공적으로 생성되었습니다.";
+    if ($is_admin) {
+        $insert_request = $con->prepare("INSERT INTO admin_requests (name, username, password, email, student_id) VALUES (?, ?, ?, ?, ?)");
+        $insert_request->bind_param("sssss", $name, $username, $password, $email, $student_id);
+        if ($insert_request->execute()) {
+            $_SESSION['message'] = "관리자 승인 후 가입 가능합니다.";
+        } else {
+            $_SESSION['message'] = "관리자 승인 요청 중 오류가 발생했습니다.";
+        }
         header("Location: index.php");
         exit();
     } else {
-        $_SESSION['message'] = "오류: " . $con->error;
+        $insert_user = $con->prepare("INSERT INTO users (name, username, password, email, student_id, is_admin) VALUES (?, ?, ?, ?, ?, FALSE)");
+        $insert_user->bind_param("sssss", $name, $username, $password, $email, $student_id);
+        if ($insert_user->execute()) {
+            $_SESSION['message'] = "계정이 성공적으로 생성되었습니다.";
+        } else {
+            $_SESSION['message'] = "오류: " . $con->error;
+        }
         header("Location: index.php");
         exit();
     }

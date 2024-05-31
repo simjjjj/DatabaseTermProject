@@ -11,6 +11,19 @@ function requireAdmin() {
     }
 }
 
+function getUsers($con) {
+    $stmt = $con->prepare("SELECT * FROM users");
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+function getAdminPetitionResponses($con, $petition_id) {
+    $stmt = $con->prepare("SELECT pr.*, u.username AS admin_name FROM petition_responses pr JOIN users u ON pr.admin_id = u.id WHERE pr.petition_id = ?");
+    $stmt->bind_param("i", $petition_id);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
 function getPetitions($con, $is_popular = false) {
     $stmt = $con->prepare("SELECT * FROM petitions WHERE is_popular = ?");
     $stmt->bind_param("i", $is_popular);

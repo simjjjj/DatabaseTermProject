@@ -45,7 +45,13 @@ require_once 'functions.php';
                 </li>
                 <li><a href="#" class="hover:text-blue-600" onclick="showContactMessage()">문의하기</a></li>
                 <?php if (isAdmin()) { ?>
-                    <li><a href="#" onclick="checkLogin('adminModal')" class="hover:text-blue-600">관리자 페이지</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="hover:text-blue-600">관리자 페이지</a>
+                        <div class="dropdown-content">
+                            <a href="admin_dashboard.php">대시보드</a>
+                            <a href="admin_approve.php">관리자 승인</a>
+                        </div>
+                    </li>
                 <?php } ?>
             </ul>
             <div class="flex space-x-4">
@@ -98,7 +104,13 @@ require_once 'functions.php';
                 </div>
                 <div class="mb-4">
                     <label for="petition-category" class="block text-sm font-medium text-gray-700">카테고리</label>
-                    <input type="text" id="petition-category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    <select id="petition-category" name="category" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                        <option value="" disabled selected>카테고리를 선택하세요</option>
+                        <option value="학사 및 교육">학사 및 교육</option>
+                        <option value="캠퍼스 시설">캠퍼스 시설</option>
+                        <option value="학생 복지">학생 복지</option>
+                        <option value="행정 및 정책">행정 및 정책</option>
+                    </select>
                 </div>
                 <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">청원하기</button>
             </form>
@@ -136,23 +148,23 @@ require_once 'functions.php';
                 <input type="hidden" name="signup" value="1">
                 <div class="mb-4">
                     <label for="register-name" class="block text-sm font-medium text-gray-700">이름</label>
-                    <input type="text" id="register-name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <input type="text" id="register-name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                 </div>
                 <div class="mb-4">
                     <label for="register-username" class="block text-sm font-medium text-gray-700">아이디</label>
-                    <input type="text" id="register-username" name="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <input type="text" id="register-username" name="username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                 </div>
                 <div class="mb-4">
                     <label for="register-password" class="block text-sm font-medium text-gray-700">비밀번호</label>
-                    <input type="password" id="register-password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <input type="password" id="register-password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                 </div>
                 <div class="mb-4">
                     <label for="register-password-confirm" class="block text-sm font-medium text-gray-700">비밀번호 확인</label>
-                    <input type="password" id="register-password-confirm" name="password_confirm" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <input type="password" id="register-password-confirm" name="password_confirm" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                 </div>
                 <div class="mb-4">
                     <label for="register-email" class="block text-sm font-medium text-gray-700">이메일</label>
-                    <input type="email" id="register-email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <input type="email" id="register-email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                 </div>
                 <div class="mb-4">
                     <label for="register-student-id" class="block text-sm font-medium text-gray-700">학생증 인증</label>
@@ -160,7 +172,7 @@ require_once 'functions.php';
                         <label for="student-id" class="cursor-pointer inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                             <i class="fas fa-upload mr-2"></i> 파일 선택
                         </label>
-                        <input type="file" id="student-id" name="student_id" class="hidden">
+                        <input type="file" id="student-id" name="student_id" class="hidden" required>
                         <span id="student-id-filename" class="ml-2 text-sm text-gray-600"></span>
                     </div>
                 </div>
@@ -198,7 +210,6 @@ require_once 'functions.php';
     </div>
 </body>
 </html>
-
 
 <script>
 function openModal(id) {

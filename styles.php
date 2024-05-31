@@ -145,11 +145,11 @@
     .dark-mode .text-black {
         color: #F9FAFB;
     }
-    .dark-mode input, .dark-mode textarea {
+    .dark-mode input, .dark-mode textarea, .dark-mode select {
         background-color: #374151;
         color: #D1D5DB;
     }
-    .dark-mode input::placeholder, .dark-mode textarea::placeholder {
+    .dark-mode input::placeholder, .dark-mode textarea::placeholder, .dark-mode select::placeholder {
         color: #9CA3AF;
     }
     .dark-mode .border-gray-300 {
@@ -157,5 +157,21 @@
     }
     .dark-mode .text-gray-700 {
         color: #E5E7EB;
+    }
+
+    select {
+        appearance: none;
+        background-color: #374151;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        font-size: 16px;
+        width: 100%;
+        color: #D1D5DB;
+    }
+    select:focus {
+        border-color: #5b9dd9;
+        box-shadow: 0 0 8px rgba(91, 157, 217, 0.6);
+        outline: none;
     }
 </style>
