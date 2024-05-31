@@ -68,7 +68,7 @@
     </div>
 </div>
 
-<<div id="createPetitionModal" class="fixed inset-0 hidden modal flex items-center justify-center">
+<div id="createPetitionModal" class="fixed inset-0 hidden modal flex items-center justify-center">
     <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold">청원하기</h2>
@@ -102,7 +102,6 @@
         </form>
     </div>
 </div>
-
 
 <div id="messageModal" class="fixed inset-0 hidden modal flex items-center justify-center">
     <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">

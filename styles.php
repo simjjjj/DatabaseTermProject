@@ -72,16 +72,38 @@
         transition: transform 0.3s ease-in-out;
     }
     .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
         background-color: rgba(0, 0, 0, 0.8);
+        align-items: center;
+        justify-content: center;
     }
     .modal-content {
+        background-color: #fff;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
         animation: modalOpen 0.5s;
     }
     @keyframes modalOpen {
-        from { opacity: 0; transform: translateY(-50px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
-        .button-edit {
+    .button-edit {
         color: #3b82f6; /* Tailwind text-blue-600 */
         font-weight: 600; /* Tailwind font-semibold */
     }

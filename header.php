@@ -40,6 +40,7 @@ require_once 'functions.php';
                     <div class="dropdown-content">
                         <a href="#" onclick="checkLoginRedirect('mypage.php')">내가 쓴 청원</a>
                         <a href="#" onclick="checkLoginRedirect('liked_petitions.php')">좋아요 한 청원</a>
+                        <a href="#" onclick="checkLoginRedirect('user_info.php')">회원정보</a>
                     </div>
                 </li>
                 <li><a href="#" class="hover:text-blue-600" onclick="showContactMessage()">문의하기</a></li>

@@ -56,13 +56,13 @@ if (isset($_SESSION['message'])) {
             if ($result) {
                 while ($row = $result->fetch_assoc()) {
                     echo "<div class='bg-white shadow rounded-lg overflow-hidden petition-card'>";
-                    echo "<img src='https://placehold.co/300x200?text=' alt='Petition image' class='w-full h-48 object-cover'>";
+                    echo "<img src='uploads/" . htmlspecialchars($row['attachment']) . "' alt='Petition image' class='w-full h-48 object-cover'>";
                     echo "<div class='p-4'>";
                     echo "<h3 class='font-bold text-lg'>" . htmlspecialchars($row['title']) . "</h3>";
                     echo "<p class='text-sm mt-2 text-gray-700'>" . htmlspecialchars($row['content']) . "</p>";
                     echo "<div class='mt-4 flex justify-between items-center'>";
                     echo "<span class='text-gray-600 text-sm'>청원기간: " . htmlspecialchars($row['created_at']) . "</span>";
-                    echo "<button class='text-blue-600 hover:underline'>자세히 보기</button>";
+                    echo "<button class='text-blue-600 hover:underline' onclick='openPetitionModal(" . json_encode($row) . ")'>자세히 보기</button>";
                     echo "</div>";
                     echo "<div class='mt-4 flex justify-between items-center'>";
                     echo "<button onclick='likePetition(" . $row['id'] . ")' class='text-gray-600 hover:underline'><i class='" . ($row['liked'] ? "fas text-red-600" : "far") . " fa-heart' id='like-icon-" . $row['id'] . "'></i> 좋아요</button>";
@@ -93,7 +93,7 @@ if (isset($_SESSION['message'])) {
                     echo "<p class='text-sm mt-2 text-gray-700'>" . htmlspecialchars($row['content']) . "</p>";
                     echo "<div class='mt-4 flex justify-between items-center'>";
                     echo "<span class='text-gray-600 text-sm'>청원기간: " . htmlspecialchars($row['created_at']) . "</span>";
-                    echo "<button class='text-blue-600 hover:underline'>자세히 보기</button>";
+                    echo "<button class='text-blue-600 hover:underline' onclick='openPetitionModal(" . json_encode($row) . ")'>자세히 보기</button>";
                     echo "</div>";
                     echo "<div class='mt-4 flex justify-between items-center'>";
                     echo "<button onclick='likePetition(" . $row['id'] . ")' class='text-gray-600 hover:underline'><i class='" . ($row['liked'] ? "fas text-red-600" : "far") . " fa-heart' id='like-icon-" . $row['id'] . "'></i> 좋아요</button>";
@@ -113,6 +113,46 @@ if (isset($_SESSION['message'])) {
     </div>
 </section>
 
+<!-- 청원 자세히 보기 모달 -->
+<div id="petitionDetailModal" class="fixed inset-0 hidden modal flex items-center justify-center">
+    <div class="bg-white p-8 rounded shadow-lg w-96 modal-content">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold" id="modal-title">청원 상세</h2>
+            <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('petitionDetailModal')">&times;</button>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">제목</label>
+            <p id="modal-title-content" class="mt-1 block w-full text-gray-900"></p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">내용</label>
+            <p id="modal-content" class="mt-1 block w-full text-gray-900"></p>
+        </div>
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">첨부 파일</label>
+            <img id="modal-image" class="mt-1 block w-full">
+        </div>
+    </div>
+</div>
+
 <?php include 'footer.php'; ?>
 <?php include 'modals.php'; ?>
 <?php include 'scripts.php'; ?>
+
+<script>
+    function openPetitionModal(petition) {
+        document.getElementById('modal-title-content').textContent = petition.title;
+        document.getElementById('modal-content').textContent = petition.content;
+        if (petition.attachment) {
+            document.getElementById('modal-image').src = 'uploads/' + petition.attachment;
+            document.getElementById('modal-image').style.display = 'block';
+        } else {
+            document.getElementById('modal-image').style.display = 'none';
+        }
+        document.getElementById('petitionDetailModal').classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    }
+</script>
