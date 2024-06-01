@@ -43,7 +43,7 @@ $users = $con->query("SELECT * FROM users");
                     <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($petition['category']); ?></td>
                     <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($petition['likes']); ?></td>
                     <td class="py-2 px-4 border-b">
-                        <a href="petition_detail.php?id=<?php echo $petition['id']; ?>" class="text-blue-600 hover:underline">자세히 보기</a>
+                        <a href="admin_petition_detail.php?id=<?php echo $petition['id']; ?>" class="text-blue-600 hover:underline">자세히 보기</a>
                     </td>
                 </tr>
                 <?php } ?>
