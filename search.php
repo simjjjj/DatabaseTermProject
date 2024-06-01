@@ -62,7 +62,6 @@ if ($query || $category || ($start_date && $end_date)) {
     <?php if ($results): ?>
       <?php foreach ($results as $row): ?>
         <div class="bg-white shadow-lg rounded-lg overflow-hidden petition-card">
-          <img src="https://placehold.co/300x200?text=" alt="Petition image" class="w-full h-48 object-cover">
           <div class="p-4">
             <h3 class="font-bold text-lg"><a href="petition_detail.php?id=<?php echo $row['id']; ?>"><?php echo htmlspecialchars($row['title']); ?></a></h3>
             <p class="text-sm mt-2 text-gray-700"><?php echo htmlspecialchars($row['content']); ?></p>
