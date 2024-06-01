@@ -23,7 +23,7 @@ $result = $con->query("SELECT p.* FROM petitions p INNER JOIN likes l ON p.id = 
                         <p class='text-sm mt-2 text-gray-700'><?php echo htmlspecialchars($row['content']); ?></p>
                         <div class='mt-4 flex justify-between items-center'>
                             <span class='text-gray-600 text-sm'>청원기간: <?php echo htmlspecialchars($row['created_at']); ?></span>
-                            <button class='text-blue-600 hover:underline'>자세히 보기</button>
+                            <a href='petition_detail.php?id=<?php echo htmlspecialchars($row['id']); ?>' class='text-blue-600 hover:underline'>자세히 보기</a>
                         </div>
                         <div class='mt-4 flex justify-between items-center'>
                             <span class='text-gray-600 text-sm'><?php echo htmlspecialchars($row['likes']); ?> Likes</span>

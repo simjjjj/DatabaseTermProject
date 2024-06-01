@@ -73,9 +73,21 @@ CREATE TABLE IF NOT EXISTS admin_requests (
     request_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 청원 답변 테이블 생성
+CREATE TABLE IF NOT EXISTS petition_responses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    petition_id INT NOT NULL,
+    admin_id INT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE,
+    FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 -- 초기 관리자 계정 생성
 INSERT INTO users (name, username, password, email, student_id, is_admin) 
-VALUES ('Admin', 'admin', '$2y$10$snXwsiDL2tVCMI/rpPstc.g5Tp3cKT/STSy37aWkU2m6w5yLrNYIi', 'admin@example.com', '', TRUE);
+VALUES ('Admin', 'admin', '$2y$10$snXwsiDL2tVCMI/rpPstc.g5Tp3cKT/STSy37aWkU2m6w5yLrNYIi', 'admin@example.com', '', TRUE)
+ON DUPLICATE KEY UPDATE name=VALUES(name), password=VALUES(password), email=VALUES(email), student_id=VALUES(student_id), is_admin=VALUES(is_admin);
 
 -- 테이블 구조 확인
 DESCRIBE users;
@@ -84,6 +96,7 @@ DESCRIBE signatures;
 DESCRIBE likes;
 DESCRIBE comments;
 DESCRIBE admin_requests;
+DESCRIBE petition_responses;
 
 -- 모든 데이터베이스 목록 보기
 SHOW DATABASES;
@@ -95,6 +108,7 @@ SELECT * FROM signatures;
 SELECT * FROM likes;
 SELECT * FROM comments;
 SELECT * FROM admin_requests;
+SELECT * FROM petition_responses;
 
 SELECT * FROM users WHERE username = 'admin';
 

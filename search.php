@@ -9,18 +9,18 @@ $end_date = isset($_GET['end_date']) ? $con->real_escape_string($_GET['end_date'
 
 $results = [];
 if ($query || $category || ($start_date && $end_date)) {
-    $sql = "SELECT * FROM petitions WHERE 1=1";
+    $sql = "SELECT p.*, (SELECT COUNT(*) FROM petition_responses pr WHERE pr.petition_id = p.id) AS response_count FROM petitions p WHERE 1=1";
 
     if ($query) {
-        $sql .= " AND (title LIKE '%$query%' OR content LIKE '%$query%')";
+        $sql .= " AND (p.title LIKE '%$query%' OR p.content LIKE '%$query%')";
     }
 
     if ($category) {
-        $sql .= " AND category='$category'";
+        $sql .= " AND p.category='$category'";
     }
 
     if ($start_date && $end_date) {
-        $sql .= " AND DATE(created_at) BETWEEN '$start_date' AND '$end_date'";
+        $sql .= " AND DATE(p.created_at) BETWEEN '$start_date' AND '$end_date'";
     }
 
     $stmt = $con->prepare($sql);
@@ -63,11 +63,16 @@ if ($query || $category || ($start_date && $end_date)) {
       <?php foreach ($results as $row): ?>
         <div class="bg-white shadow-lg rounded-lg overflow-hidden petition-card">
           <div class="p-4">
-            <h3 class="font-bold text-lg"><a href="petition_detail.php?id=<?php echo $row['id']; ?>"><?php echo htmlspecialchars($row['title']); ?></a></h3>
+            <h3 class="font-bold text-lg">
+              <?php echo htmlspecialchars($row['title']); ?>
+              <?php if ($row['response_count'] > 0): ?>
+                <span class="text-red-600" style="padding-left: 145px;">답변 완료</span>
+              <?php endif; ?>
+            </h3>
             <p class="text-sm mt-2 text-gray-700"><?php echo htmlspecialchars($row['content']); ?></p>
             <div class="mt-4 flex justify-between items-center">
               <span class="text-gray-600 text-sm">청원기간: <?php echo htmlspecialchars($row['created_at']); ?></span>
-              <button class="text-blue-600 hover:underline">자세히 보기</button>
+              <a href="petition_detail.php?id=<?php echo $row['id']; ?>" class="text-blue-600 hover:underline">자세히 보기</a>
             </div>
             <div class="mt-4 flex justify-between items-center">
               <span class="text-gray-600 text-sm"><?php echo htmlspecialchars($row['likes']); ?> Likes</span>

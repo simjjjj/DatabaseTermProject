@@ -53,7 +53,13 @@ $categories = ["학사 및 교육", "캠퍼스 시설", "학생 복지", "행정
 
 $category_petitions = [];
 foreach ($categories as $category) {
-    $stmt = $con->prepare("SELECT p.*, l.user_id IS NOT NULL AS liked FROM petitions p LEFT JOIN likes l ON p.id = l.petition_id AND l.user_id = ? WHERE p.category = ?");
+    $stmt = $con->prepare("
+        SELECT p.*, l.user_id IS NOT NULL AS liked, 
+        (SELECT COUNT(*) FROM petition_responses pr WHERE pr.petition_id = p.id) AS response_count 
+        FROM petitions p 
+        LEFT JOIN likes l ON p.id = l.petition_id AND l.user_id = ? 
+        WHERE p.category = ?
+    ");
     $userId = isset($_SESSION['userid']) ? $_SESSION['userid'] : 0;
     $stmt->bind_param("is", $userId, $category);
     $stmt->execute();
@@ -64,18 +70,47 @@ foreach ($categories as $category) {
 include 'header.php';
 ?>
 
+<style>
+    .section-divider {
+        border-bottom: 2px solid #ccc;
+        margin: 40px 0;
+    }
+    .section-title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .petition-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
+
 <section class="bg-gray-100 py-12">
     <div class="container mx-auto px-6">
-        <h2 class="text-3xl font-bold mb-6">인기 청원</h2>
+        <h2 class="section-title">인기 청원</h2>
         <div id="popular-petition-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <?php
             $userId = isset($_SESSION['userid']) ? $_SESSION['userid'] : 0;
-            $result = $con->query("SELECT p.*, l.user_id IS NOT NULL AS liked FROM petitions p LEFT JOIN likes l ON p.id = l.petition_id AND l.user_id = $userId WHERE p.is_popular = 1");
+            $result = $con->query("
+                SELECT p.*, l.user_id IS NOT NULL AS liked, 
+                (SELECT COUNT(*) FROM petition_responses pr WHERE pr.petition_id = p.id) AS response_count 
+                FROM petitions p 
+                LEFT JOIN likes l ON p.id = l.petition_id AND l.user_id = $userId 
+                WHERE p.is_popular = 1
+            ");
             if ($result) {
                 while ($row = $result->fetch_assoc()) {
-                    echo "<div class='bg-white shadow rounded-lg overflow-hidden petition-card'>";
+                    echo "<div class='bg-white shadow-lg rounded-lg overflow-hidden petition-card'>";
                     echo "<div class='p-4'>";
+                    echo "<div class='flex justify-between items-center'>";
                     echo "<h3 class='font-bold text-lg'><a href='petition_detail.php?id=" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['title']) . "</a></h3>";
+                    if ($row['response_count'] > 0) {
+                        echo "<p class='text-red-600 font-bold ml-4'>답변 완료</p>";
+                    }
+                    echo "</div>";
                     echo "<p class='text-sm mt-2 text-gray-700'>" . htmlspecialchars($row['content']) . "</p>";
                     echo "<div class='mt-4 flex justify-between items-center'>";
                     echo "<span class='text-gray-600 text-sm'>청원기간: " . htmlspecialchars($row['created_at']) . "</span>";
@@ -93,13 +128,14 @@ include 'header.php';
             }
             ?>
         </div>
+        <div class="section-divider"></div>
     </div>
 </section>
 
 <!-- 추가된 카테고리별 청원 섹션 -->
 <section class="bg-gray-100 py-12">
     <div class="container mx-auto px-6">
-        <h2 class="text-3xl font-bold mb-6">청원 안내</h2>
+        <h2 class="section-title">청원 안내</h2>
         
         <?php foreach ($categories as $category): ?>
             <div class="mb-8">
@@ -109,11 +145,16 @@ include 'header.php';
                         <?php foreach ($category_petitions[$category] as $petition): ?>
                             <div class="bg-white shadow-lg rounded-lg overflow-hidden petition-card">
                                 <div class="p-4">
-                                    <h3 class="font-bold text-lg"><a href="petition_detail.php?id=<?php echo $petition['id']; ?>"><?php echo htmlspecialchars($petition['title']); ?></a></h3>
+                                    <div class="flex justify-between items-center">
+                                        <h3 class="font-bold text-lg"><?php echo htmlspecialchars($petition['title']); ?></h3>
+                                        <?php if ($petition['response_count'] > 0): ?>
+                                            <p class="text-red-600 font-bold ml-4">답변 완료</p>
+                                        <?php endif; ?>
+                                    </div>
                                     <p class="text-sm mt-2 text-gray-700"><?php echo htmlspecialchars($petition['content']); ?></p>
                                     <div class="mt-4 flex justify-between items-center">
                                         <span class="text-gray-600 text-sm">청원기간: <?php echo htmlspecialchars($petition['created_at']); ?></span>
-                                        <a href="petition_detail.php?id=<?php echo $petition['id']; ?>" class="text-blue-600 hover:underline">자세히 보기</a>
+                                        <a href="petition_detail.php?id=<?php echo htmlspecialchars($petition['id']); ?>" class="text-blue-600 hover:underline">자세히 보기</a>
                                     </div>
                                     <div class="mt-4 flex justify-between items-center">
                                         <button onclick="likePetition(<?php echo htmlspecialchars($petition['id'], ENT_QUOTES, 'UTF-8'); ?>)" class="text-gray-600 hover:underline"><i class="<?php echo htmlspecialchars($petition['liked'] ? 'fas text-red-600' : 'far', ENT_QUOTES, 'UTF-8'); ?> fa-heart" id="like-icon-<?php echo htmlspecialchars($petition['id'], ENT_QUOTES, 'UTF-8'); ?>"></i> 좋아요</button>
@@ -126,6 +167,7 @@ include 'header.php';
                         <p>해당 카테고리에 청원이 없습니다.</p>
                     <?php endif; ?>
                 </div>
+                <div class="section-divider"></div>
             </div>
         <?php endforeach; ?>
     </div>

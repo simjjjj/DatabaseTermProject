@@ -12,7 +12,7 @@ $petition = $result->fetch_assoc();
 
 $comments = [];
 if ($petition) {
-    $stmt = $con->prepare("SELECT * FROM comments WHERE petition_id = ? ORDER BY created_at ASC");
+    $stmt = $con->prepare("SELECT c.*, u.username AS author FROM comments c JOIN users u ON c.user_id = u.id WHERE c.petition_id = ? ORDER BY c.created_at ASC");
     $stmt->bind_param("i", $petition_id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -28,6 +28,21 @@ if ($petition) {
     $result = $stmt->get_result();
     while ($row = $result->fetch_assoc()) {
         $responses[] = $row;
+    }
+
+    // 이미 댓글을 단 적이 있는지 확인
+    $user_commented = false;
+    if (isset($_SESSION['userid'])) {
+        $user_id = $_SESSION['userid'];
+        $stmt = $con->prepare("SELECT COUNT(*) FROM comments WHERE petition_id = ? AND user_id = ?");
+        $stmt->bind_param("ii", $petition_id, $user_id);
+        $stmt->execute();
+        $stmt->bind_result($comment_count);
+        $stmt->fetch();
+        $stmt->close();
+        if ($comment_count > 0) {
+            $user_commented = true;
+        }
     }
 }
 ?>
@@ -68,11 +83,15 @@ if ($petition) {
     <?php endif; ?>
     
     <?php if (isset($_SESSION['userid'])): ?>
-      <form method="POST" action="add_comment.php" class="mt-6">
-        <input type="hidden" name="petition_id" value="<?php echo $petition_id; ?>">
-        <textarea name="content" class="border px-4 py-2 rounded w-full text-gray-900 dark:text-gray-300 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600" placeholder="댓글을 입력하세요" required></textarea>
-        <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded mt-4">댓글 달기</button>
-      </form>
+        <?php if ($user_commented): ?>
+            <p class="mt-4 text-gray-700 dark:text-gray-300">이미 이 청원에 댓글을 작성했습니다.</p>
+        <?php else: ?>
+            <form method="POST" action="add_comment.php" class="mt-6">
+                <input type="hidden" name="petition_id" value="<?php echo $petition_id; ?>">
+                <textarea name="content" class="border px-4 py-2 rounded w-full text-gray-900 dark:text-gray-300 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600" placeholder="댓글을 입력하세요" required></textarea>
+                <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded mt-4">댓글 달기</button>
+            </form>
+        <?php endif; ?>
     <?php else: ?>
       <p class="mt-4 text-gray-700 dark:text-gray-300">댓글을 달려면 <a href="#" onclick="openModal('loginModal')" class="text-blue-600 hover:underline">로그인</a>하세요.</p>
     <?php endif; ?>

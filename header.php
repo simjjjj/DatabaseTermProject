@@ -13,9 +13,9 @@ require_once 'functions.php';
 <body class="dark-mode">
     <header class="relative pt-20">
         <div class="slideshow-container">
-            <img src="a2.jpg" class="slides fade">
-            <img src="a2.jpg" class="slides fade">
-            <img src="a2.jpg" class="slides fade">
+            <img src="q1.jpg" class="slides fade">
+            <img src="q2.jpg" class="slides fade"> 
+            <img src="q3.jpg" class="slides fade">
         </div>
         <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-30 flex flex-col items-center justify-center text-center text-white">
             <h1 class="text-4xl md:text-6xl font-bold">건국대학교 청원</h1>
@@ -204,7 +204,8 @@ require_once 'functions.php';
                 <h2 class="text-2xl font-bold">문의하기</h2>
                 <button class="text-gray-500 hover:text-gray-700" onclick="closeModal('contactModal')">&times;</button>
             </div>
-            <p class="mb-4">나 방승재다 전화박아라</p>
+            <p class="mb-4">전화 문의: 043-840-3114</p>
+            <p class="mb-4">Instagram 문의: <a href="https://www.instagram.com/KU_petition/" class="text-gray-400 hover:text-gray-200 mx-2" aria-label="인스타그램"><i class="fab fa-instagram"></i></a></p>
             <button class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700" onclick="closeModal('contactModal')">확인</button>
         </div>
     </div>

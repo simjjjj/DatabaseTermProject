@@ -22,6 +22,17 @@ if ($petition) {
     }
 }
 
+$comments = [];
+if ($petition) {
+    $stmt = $con->prepare("SELECT c.*, u.username AS author FROM comments c JOIN users u ON c.user_id = u.id WHERE c.petition_id = ? ORDER BY c.created_at ASC");
+    $stmt->bind_param("i", $petition_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $comments[] = $row;
+    }
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['respond'])) {
     $response_content = $con->real_escape_string($_POST['response_content']);
     $admin_id = $_SESSION['userid'];
@@ -34,6 +45,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['respond'])) {
         $_SESSION['message'] = "답변이 성공적으로 추가되었습니다.";
     } else {
         $_SESSION['message'] = "답변 추가 중 오류가 발생했습니다.";
+    }
+
+    header("Location: admin_petition_detail.php?id=" . $petition_id);
+    exit();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_comment'])) {
+    $comment_id = intval($_POST['comment_id']);
+
+    $stmt = $con->prepare("DELETE FROM comments WHERE id = ?");
+    $stmt->bind_param("i", $comment_id);
+    $stmt->execute();
+
+    if ($stmt->affected_rows > 0) {
+        $_SESSION['message'] = "댓글이 성공적으로 삭제되었습니다.";
+    } else {
+        $_SESSION['message'] = "댓글 삭제 중 오류가 발생했습니다.";
     }
 
     header("Location: admin_petition_detail.php?id=" . $petition_id);
@@ -80,6 +108,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['respond'])) {
                 <?php endforeach; ?>
             <?php else: ?>
                 <p class="text-gray-700 dark:text-gray-300">답변이 없습니다.</p>
+            <?php endif; ?>
+
+            <h3 class="text-2xl font-bold mb-4 text-white-900 dark:text-white-200">댓글</h3>
+            <?php if ($comments): ?>
+                <?php foreach ($comments as $comment): ?>
+                    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden mb-4">
+                        <div class="p-4">
+                            <p class="text-sm text-gray-700 dark:text-gray-300"><?php echo htmlspecialchars($comment['content']); ?></p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">작성자: <?php echo htmlspecialchars($comment['author']); ?>, 작성일: <?php echo htmlspecialchars($comment['created_at']); ?></p>
+                            <form method="POST" action="admin_petition_detail.php?id=<?php echo $petition_id; ?>" class="mt-4">
+                                <input type="hidden" name="comment_id" value="<?php echo $comment['id']; ?>">
+                                <button type="submit" name="delete_comment" class="bg-red-600 text-white py-2 px-4 rounded">댓글 삭제</button>
+                            </form>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="text-gray-700 dark:text-gray-300">댓글이 없습니다.</p>
             <?php endif; ?>
 
             <form method="POST" action="admin_petition_detail.php?id=<?php echo $petition_id; ?>" class="mt-6">
