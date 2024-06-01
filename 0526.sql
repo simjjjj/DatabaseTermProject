@@ -51,6 +51,17 @@ CREATE TABLE IF NOT EXISTS likes (
     UNIQUE (petition_id, user_id) -- 중복 좋아요 방지를 위해 UNIQUE 제약 조건 추가
 );
 
+-- 댓글 테이블 생성
+CREATE TABLE IF NOT EXISTS comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    petition_id INT NOT NULL,
+    user_id INT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 -- 관리자 요청 테이블 생성
 CREATE TABLE IF NOT EXISTS admin_requests (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -66,13 +77,12 @@ CREATE TABLE IF NOT EXISTS admin_requests (
 INSERT INTO users (name, username, password, email, student_id, is_admin) 
 VALUES ('Admin', 'admin', '$2y$10$snXwsiDL2tVCMI/rpPstc.g5Tp3cKT/STSy37aWkU2m6w5yLrNYIi', 'admin@example.com', '', TRUE);
 
-
 -- 테이블 구조 확인
 DESCRIBE users;
 DESCRIBE petitions;
 DESCRIBE signatures;
 DESCRIBE likes;
-DESCRIBE petition_responses;
+DESCRIBE comments;
 DESCRIBE admin_requests;
 
 -- 모든 데이터베이스 목록 보기
@@ -83,7 +93,7 @@ SELECT * FROM users;
 SELECT * FROM petitions;
 SELECT * FROM signatures;
 SELECT * FROM likes;
-SELECT * FROM petition_responses;
+SELECT * FROM comments;
 SELECT * FROM admin_requests;
 
 SELECT * FROM users WHERE username = 'admin';
@@ -91,7 +101,7 @@ SELECT * FROM users WHERE username = 'admin';
 -- 데이터 초기화 및 삭제 (참조 무결성 제약 조건을 피하기 위해 순서 주의)
 DELETE FROM likes;
 DELETE FROM signatures;
-DELETE FROM petition_responses;
+DELETE FROM comments;
 DELETE FROM petitions;
 DELETE FROM users;
 
