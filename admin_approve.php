@@ -43,6 +43,45 @@ $requests = $con->query("SELECT * FROM admin_requests");
     <meta charset="UTF-8">
     <title>관리자 승인</title>
     <?php include 'styles.php'; ?>
+    <style>
+        body.dark-mode {
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table-custom th,
+        .table-custom td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .table-custom th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        .dark-mode .table-custom th {
+            background-color: #333;
+            color: #f2f2f2;
+        }
+        .dark-mode .table-custom td {
+            border-color: #555;
+        }
+        .btn-approve {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-approve:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body class="dark-mode">
     <?php include 'header.php'; ?>
@@ -54,25 +93,25 @@ $requests = $con->query("SELECT * FROM admin_requests");
             unset($_SESSION['message']);
         }
         ?>
-        <table class="min-w-full bg-white dark:bg-gray-800">
+        <table class="table-custom">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 border-b">이름</th>
-                    <th class="py-2 px-4 border-b">아이디</th>
-                    <th class="py-2 px-4 border-b">이메일</th>
-                    <th class="py-2 px-4 border-b">승인</th>
+                    <th>이름</th>
+                    <th>아이디</th>
+                    <th>이메일</th>
+                    <th>승인</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while ($request = $requests->fetch_assoc()) { ?>
                 <tr>
-                    <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($request['name']); ?></td>
-                    <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($request['username']); ?></td>
-                    <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($request['email']); ?></td>
-                    <td class="py-2 px-4 border-b">
+                    <td><?php echo htmlspecialchars($request['name']); ?></td>
+                    <td><?php echo htmlspecialchars($request['username']); ?></td>
+                    <td><?php echo htmlspecialchars($request['email']); ?></td>
+                    <td>
                         <form method="post" action="admin_approve.php">
                             <input type="hidden" name="request_id" value="<?php echo $request['id']; ?>">
-                            <button type="submit" name="approve" class="bg-blue-600 text-white py-1 px-3 rounded">승인</button>
+                            <button type="submit" name="approve" class="btn-approve">승인</button>
                         </form>
                     </td>
                 </tr>

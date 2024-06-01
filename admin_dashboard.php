@@ -13,6 +13,34 @@ $users = $con->query("SELECT * FROM users");
     <meta charset="UTF-8">
     <title>관리자 대시보드</title>
     <?php include 'styles.php'; ?>
+    <style>
+        body.dark-mode {
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table-custom th,
+        .table-custom td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .table-custom th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        .dark-mode .table-custom th {
+            background-color: #333;
+            color: #f2f2f2;
+        }
+        .dark-mode .table-custom td {
+            border-color: #555;
+        }
+    </style>
 </head>
 <body class="dark-mode">
     <?php include 'header.php'; ?>
@@ -25,24 +53,24 @@ $users = $con->query("SELECT * FROM users");
         }
         ?>
         <h3 class="text-2xl font-bold mb-4">청원 목록</h3>
-        <table class="min-w-full bg-white dark:bg-gray-800">
+        <table class="table-custom">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 border-b">제목</th>
-                    <th class="py-2 px-4 border-b">작성자</th>
-                    <th class="py-2 px-4 border-b">카테고리</th>
-                    <th class="py-2 px-4 border-b">좋아요 수</th>
-                    <th class="py-2 px-4 border-b">관리</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>카테고리</th>
+                    <th>좋아요 수</th>
+                    <th>관리</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while ($petition = $petitions->fetch_assoc()) { ?>
                 <tr>
-                    <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($petition['title']); ?></td>
-                    <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($petition['user_id']); ?></td>
-                    <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($petition['category']); ?></td>
-                    <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($petition['likes']); ?></td>
-                    <td class="py-2 px-4 border-b">
+                    <td><?php echo htmlspecialchars($petition['title']); ?></td>
+                    <td><?php echo htmlspecialchars($petition['user_id']); ?></td>
+                    <td><?php echo htmlspecialchars($petition['category']); ?></td>
+                    <td><?php echo htmlspecialchars($petition['likes']); ?></td>
+                    <td>
                         <a href="admin_petition_detail.php?id=<?php echo $petition['id']; ?>" class="text-blue-600 hover:underline">자세히 보기</a>
                     </td>
                 </tr>
@@ -51,22 +79,22 @@ $users = $con->query("SELECT * FROM users");
         </table>
 
         <h3 class="text-2xl font-bold mb-4 mt-6">회원 목록</h3>
-        <table class="min-w-full bg-white dark:bg-gray-800">
+        <table class="table-custom">
             <thead>
                 <tr>
-                    <th class="py-2 px-4 border-b">이름</th>
-                    <th class="py-2 px-4 border-b">아이디</th>
-                    <th class="py-2 px-4 border-b">이메일</th>
-                    <th class="py-2 px-4 border-b">관리자 여부</th>
+                    <th>이름</th>
+                    <th>아이디</th>
+                    <th>이메일</th>
+                    <th>관리자 여부</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while ($user = $users->fetch_assoc()) { ?>
                 <tr>
-                    <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($user['name']); ?></td>
-                    <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($user['username']); ?></td>
-                    <td class="py-2 px-4 border-b"><?php echo htmlspecialchars($user['email']); ?></td>
-                    <td class="py-2 px-4 border-b"><?php echo $user['is_admin'] ? '예' : '아니오'; ?></td>
+                    <td><?php echo htmlspecialchars($user['name']); ?></td>
+                    <td><?php echo htmlspecialchars($user['username']); ?></td>
+                    <td><?php echo htmlspecialchars($user['email']); ?></td>
+                    <td><?php echo $user['is_admin'] ? '예' : '아니오'; ?></td>
                 </tr>
                 <?php } ?>
             </tbody>
